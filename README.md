@@ -27,7 +27,7 @@ Max 60000
 Sorting by Anonymity, type, country.
 
 ## Export
-Export current sorted proxy list
+Export currently sorted proxy list.
 
 ## You can see
 
