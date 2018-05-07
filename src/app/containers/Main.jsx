@@ -10,8 +10,8 @@ class Main extends React.Component {
         super(props);
         this.state = {
             list: "",
-            showCheckList: true,
-            done: true,
+            showCheckList: false,
+            done: false,
             settings: {
                 threads: 500,
                 timeout: 15000
