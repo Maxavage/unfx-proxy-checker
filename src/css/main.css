@@ -450,7 +450,7 @@ button {
     margin-left: 2em;
 }
 
-.save-button, .new-check-button{
+.check-button, .save-button, .new-check-button{
     margin: 1em 0 1em 0;
     background-color: #fafafa;
     color: rgba(140, 153, 167, 0.75);
@@ -480,7 +480,11 @@ button {
     margin-left: 1em;
 }
 
-.new-check-button:hover {
+.check-button {
+    margin-left: 2em;
+}
+
+.check-button:hover, .new-check-button:hover {
     color: rgba(255, 255, 255, 0.75);
     background-color: rgba(49, 188, 135, 0.65);
 }
@@ -536,12 +540,16 @@ button {
     display: inline-block;
 }
 
-.country-item.enable  > .name {
-    color: rgba(49, 188, 134, 0.85);
-}
-
 .country-item  > .name {
     color: rgba(49, 188, 134, 0.35);
+    -webkit-transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+    -moz-transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+    -ms-transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+    transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.country-item.enable  > .name {
+    color: rgba(49, 188, 134, 0.85);
 }
 
 .country-item  > .count {
