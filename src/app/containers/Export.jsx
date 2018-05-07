@@ -1,6 +1,6 @@
 import React from 'react';
 import ProxyListItem from '../components/ProxyListItem';
-import CountrySelectItem from '../components/CountrySelectItem';
+import CountrySelect from '../containers/CountrySelect';
 import {ActionFilter} from '../actions/ActionFIlter';
 import {ActionNewChecking} from '../actions/ActionNewChecking';
 import {ActionSaveList} from '../actions/ActionSaveList';
@@ -66,8 +66,8 @@ class Export extends React.PureComponent {
         this.changePage(1);
     }
 
-    toggleCountry(country) {
-        this.options.countries[country].state = !this.options.countries[country].state;
+    applyCountries(nextCountries) {
+        this.options.countries = nextCountries;
     }
 
     toggleAnon(anon) {
@@ -120,12 +120,7 @@ class Export extends React.PureComponent {
                         <input className="checkbox-one" id="type-socks5" type="checkbox" onClick={() => this.toggleType("socks5")} defaultChecked={this.options.type.socks5} /> 
                         <label htmlFor="type-socks5">Socks5</label>
                     </div>
-                    <div className="country-select">
-                        <h2>Country</h2>
-                        {
-                            Object.keys(this.options.countries).sort((a, b) => this.options.countries[b].count - this.options.countries[a].count).map((item, index) => <CountrySelectItem key={index} toggle={this.toggleCountry.bind(this)} count={this.options.countries[item].count} name={item}/>)
-                        }
-                    </div>
+                    <CountrySelect items={this.options.countries} applyCountries={this.applyCountries.bind(this)} />
                 </div>
                 <button className="button-two options-button" onClick={this.openOptions.bind(this)}>
                     <svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" viewBox="0 0 478.703 478.703">
