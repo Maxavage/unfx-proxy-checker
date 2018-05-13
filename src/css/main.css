@@ -34,7 +34,6 @@ button {
 
 .container {
     width: 100%;
-    padding-top: 1em;
     margin: auto;
     max-width: 1600px;
     background-color: #fff;
@@ -630,10 +629,11 @@ a {
 }
 
 .settings {
-    padding: 1em 2em;
+    padding: 0 2em;
     display: block;
     width: 100%;
     text-align: left;
+    margin-bottom: 2em;
 }
 
 .settings .string-two {
@@ -676,16 +676,6 @@ a {
     color: #8c99a7;
 }
 
-.input-box,
-.input-box * {
-    display: inline-block;
-}
-
-.input-box {
-    margin-top: 1em;
-    margin-right: 1em;
-}
-
 .input-box h1 {
     font-size: 0.9em;
     font-weight: 100;
@@ -698,8 +688,7 @@ a {
     outline: 0;
     border-radius: 3px;
     padding: 0.5em 0.75em;
-    max-width: 100px;
-    margin-left: 0.2em;
+    width: 100px;
     font-size: 0.9em;
     box-shadow: none;
     border: 1px solid rgba(49, 188, 134, 0.15);
@@ -710,6 +699,10 @@ a {
     -moz-transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
     -ms-transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
     transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.input-box.big input {
+    width: 100%;
 }
 
 .input-box input:hover, .input-box input:focus {
@@ -728,3 +721,174 @@ a {
 ::-webkit-scrollbar-thumb {
     background: #31bc86;
 }
+
+
+
+
+
+/* 
+    Tabs
+*/
+
+.react-tabs__tab-list {
+    margin: 0;
+    padding: 1.5em;
+    border-bottom: 1px solid rgba(49, 188, 135, 0.15);
+}
+
+.react-tabs__tab-list li{
+    display: inline-block;
+    color: rgba(49, 188, 135, 0.55);
+    font-weight: 900;
+    cursor: pointer;
+    margin-right: 1em;
+
+    -webkit-transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    -moz-transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    -ms-transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.react-tabs__tab-list li:focus {
+    outline: none;
+}
+
+.react-tabs__tab-list li:last-child{
+    margin-right: 0;
+}
+
+.react-tabs__tab-list li:hover{
+    color: rgb(49, 188, 135);
+}
+
+.react-tabs__tab-list li.react-tabs__tab--selected{
+    color: rgb(49, 188, 135);
+}
+
+
+
+
+/* 
+
+    Flex grid
+    https://github.com/kristoferjoseph/flexboxgrid
+    https://codepen.io/marcolago/pen/lqGFb
+
+*/
+
+.row {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  .col {
+    flex: 1 1 8%;
+    margin: 0 0 0.5rem 0;
+    padding: 0.5em 10px;
+    box-sizing: border-box;
+  }
+  
+  /* nested grids */
+  .row .row, .row.nested {
+    flex: 1 1 auto;
+    margin-top: -0.5em;
+  }
+  
+  /* full width grids */
+  .row.wide-fit {
+    margin-left: -10px;
+    margin-right: -10px;
+  }
+  
+  /* center grids */
+  .row.center {
+    justify-content: center;
+  }
+  
+  .center .col {
+    flex-grow: 0;
+    flex-shrink: 0;
+  }
+  
+  /* columns widths */
+  
+  .col-span-1 {
+    flex-basis: 8.3333%;
+  }
+  
+  .col-span-2 {
+    flex-basis: 16.6666%; 
+  }
+  
+  .col-span-3 {
+    flex-basis: 25%;
+  }
+  
+  .col-span-4 {
+    flex-basis: 33.3333%;
+  }
+  
+  .col-span-5 {
+    flex-basis: 41.6666%;
+  }
+  
+  .col-span-6 {
+    flex-basis: 50%;
+  }
+  
+  .col-span-7 {
+    flex-basis: 58.3333%;
+  }
+  
+  .col-span-8 {
+    flex-basis: 66.6666%;
+  }
+  
+  .col-span-9 {
+    flex-basis: 75%;
+  }
+  
+  .col-span-10 {
+    flex-basis: 83.3333%;
+  }
+  
+  .col-span-11 {
+    flex-basis: 91.6666%;
+  }
+  
+  .col-span-12 {
+    flex-basis: 100%;
+  }
+  
+  /* examples */
+  
+  .fixed-width {
+    flex: 0 0 500px;
+  }
+  
+  @media all and (max-width: 568px) {
+    .col-span-1,
+    .col-span-2,
+    .col-span-3,
+    .col-span-4,
+    .col-span-5 {
+      flex-basis: 50%;
+    }
+  
+    .col-span-6,
+    .col-span-7,
+    .col-span-8,
+    .col-span-9,
+    .col-span-10,
+    .col-span-11 {
+      flex-basis: 100%;
+    }
+  
+    .nested .col {
+      flex-basis: 100%;
+    }
+    
+  }
+  

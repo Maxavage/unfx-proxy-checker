@@ -8,15 +8,14 @@ import CheckList from '../containers/CheckList';
 class Main extends React.Component {
     constructor(props) {
         super(props);
+        
         this.state = {
             list: "",
             showCheckList: false,
             done: false,
-            settings: {
-                threads: 500,
-                timeout: 15000
-            }
         }
+
+        this.settings = React.createRef();
     }
 
     onInputProxyEvent(e) {
@@ -31,14 +30,6 @@ class Main extends React.Component {
         this.setState({done: true});
     }
 
-    onInputThreads(e) {
-        this.setState({settings:{threads: e.target.value, timeout: this.state.settings.timeout}});
-    }
-
-    onInputTimeout(e) {
-        this.setState({settings:{threads: this.state.settings.threads, timeout: e.target.value}});
-    }
-
     newChecking() {
         this.setState({showCheckList: false, done: false});
     }
@@ -50,10 +41,23 @@ class Main extends React.Component {
     render() {
         return(
             <div className="content">
-                <Settings state={this.state.settings} onInputThreads={this.onInputThreads.bind(this)} onInputTimeout={this.onInputTimeout.bind(this)} />
-                <CheckList list={this.props.state.list} counter={this.props.state.count} show={this.state.showCheckList} done={this.state.done} newChecking={this.newChecking.bind(this)}/>
-                <InputProxyList onInputEvent={this.onInputProxyEvent.bind(this)} content={this.state.list} load={this.readFromTxtDispatch.bind(this)} />
-                <button className="button-two check-button" onClick={() => ActionCheck(this.state.list, {threads: this.state.settings.threads, timeout: this.state.settings.timeout}, this.dispatchOnStartChecking.bind(this), this.dispatchOnDoneChecking.bind(this))}>Check</button>
+                <Settings
+                    ref={this.settings}
+                    settings={this.props.state.settings}
+                />
+                <CheckList 
+                    list={this.props.state.list} 
+                    counter={this.props.state.count} 
+                    show={this.state.showCheckList} 
+                    done={this.state.done} 
+                    newChecking={this.newChecking.bind(this)}
+                />
+                <InputProxyList 
+                    onInputEvent={this.onInputProxyEvent.bind(this)} 
+                    content={this.state.list} 
+                    load={this.readFromTxtDispatch.bind(this)} 
+                />
+                <button className="button-two check-button" onClick={() => ActionCheck(this.state.list, this.settings.current.state, this.dispatchOnStartChecking.bind(this), this.dispatchOnDoneChecking.bind(this))}>Check</button>
             </div>
         );
     }

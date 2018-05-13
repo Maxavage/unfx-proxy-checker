@@ -6,8 +6,8 @@ import {EventEmitter} from 'events';
 EventEmitter.defaultMaxListeners = 0;
 
 class Checker {
-    constructor(proxies, opts) {
-        this.status = {
+    constructor(proxies, options, judges) {
+        this.state = {
             counter: {
                 proxies: {
                     all: proxies.length,
@@ -21,34 +21,31 @@ class Checker {
             list: {}
         }
 
-        this.states = {
+        this.tempStates = {
             // for temporary checking states
             // this.initProxyState()
         }
 
-        this.timeout = opts.timeout;
-
-        this.judges = {
-            usual: {
-                url: 'http://proxyjudge.info/',
-                validateString: '<h1>ProxyJudge.info</h1>'
-            },
-            ssl: {
-                url: 'https://judge.unforceproxy.ru/',
-                validateString: '<p>Unforceproxy - Proxy judge</p>'
-            }
-        }
+        this.timeout = options.timeout;
+        this.judges = judges;
 
         this.pool = {
             running: 0,
-            limit: opts.threads,
+            limit: options.threads,
             queue: proxies
         }
     }
 
     getIp() {
         return new Promise((resolve, reject) => {
-            request.get({url: 'https://ip.unforceproxy.ru/', timeout: this.timeout}, (err, res) => {
+            request.get({
+                url: 'https://ip.unforceproxy.ru/', 
+                timeout: this.timeout, 
+                headers: {
+                    'User-Agent': 'UNFX IP LOOKUP'
+                }
+            }, 
+            (err, res) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -59,7 +56,7 @@ class Checker {
     }
 
     initProxyState(proxy) {
-        this.states[proxy] = {
+        this.tempStates[proxy] = {
             time: 0,
             anon: null,
             doneLevel: 0,
@@ -93,79 +90,97 @@ class Checker {
     }
 
     handleResponse(error, response, proxy, type, judge) {
-        this.states[proxy].doneLevel++;
+        this.tempStates[proxy].doneLevel++;
         if (!error && this.validateResponse(response.body, judge)) {
-            this.states[proxy].time = response.elapsedTime;
-            this.states[proxy].type.push(type);
-            this.status.counter.proxies[type]++;
-            this.states[proxy].anon = this.getAnon(response.body);
+            this.tempStates[proxy].time = response.elapsedTime;
+            this.tempStates[proxy].type.push(type);
+            this.state.counter.proxies[type]++;
+            this.tempStates[proxy].anon = this.getAnon(response.body);
         }
 
         this.isDone(proxy);
     }
 
+    getAgentConfig(scheme, proxy) {
+        let agent = new ProxyAgent(scheme + proxy);
+        agent.timeout = this.timeout;
+        return agent;
+    }
+
     checkHttp(proxy) {
-        let httpAgent = new ProxyAgent("http://" + proxy);
-        httpAgent.timeout = this.timeout;
-        
-        request.get({url: this.judges.usual.url, time: true, timeout: this.timeout, agent: httpAgent},
+        request.get({
+            url: this.judges.usual.url, 
+            time: true, 
+            timeout: this.timeout, 
+            agent: this.getAgentConfig("http://", proxy)
+        },
         (err, res) => {
             this.handleResponse(err, res, proxy, 'http', 'usual');
         });
     }
 
     checkHttps(proxy) {
-        let httpsAgent = new ProxyAgent("http://" + proxy);
-        httpsAgent.timeout = this.timeout;
-        
-        request.get({url: this.judges.ssl.url, time: true, strictSSL: true, timeout: this.timeout, agent: httpsAgent},
+        request.get({
+            url: this.judges.ssl.url, 
+            time: true, 
+            strictSSL: true, 
+            timeout: this.timeout, 
+            agent: this.getAgentConfig("http://", proxy)
+        },
         (err, res) => {
             this.handleResponse(err, res, proxy, 'https', 'ssl');
         });
     }
 
     checkSocks4(proxy) {
-        let socks4Agent = new ProxyAgent("socks4://" + proxy);
-        socks4Agent.timeout = this.timeout;
-        
-        request.get({url: this.judges.usual.url, time: true, timeout: this.timeout, agent: socks4Agent},
+        request.get({
+            url: this.judges.usual.url, 
+            time: true, 
+            timeout: this.timeout, 
+            agent: this.getAgentConfig("socks4://", proxy)
+        },
         (err, res) => {
             this.handleResponse(err, res, proxy, 'socks4', 'usual');
         });
     }
 
     checkSocks5(proxy) {
-        let socks5Agent = new ProxyAgent("socks5://" + proxy);
-        socks5Agent.timeout = this.timeout;
-
-        request.get({url: this.judges.usual.url, time: true, timeout: this.timeout, agent: socks5Agent},
+        request.get({
+            url: this.judges.usual.url, 
+            time: true, 
+            timeout: this.timeout, 
+            agent: this.getAgentConfig("socks5://", proxy)
+        },
         (err, res) => {
             this.handleResponse(err, res, proxy, 'socks5', 'usual');
         });
     }
 
     isDone(proxy) {
-        if(this.states[proxy].doneLevel == 4){
-            this.status.counter.proxies.done++;
-            store.dispatch({type: 'UP_STATUS', count: this.status.counter.proxies});
+        store.dispatch({type: 'UP_STATUS', count: this.state.counter.proxies});
+        
+        if(this.tempStates[proxy].doneLevel == 4){
+            this.state.counter.proxies.done++;
 
-            if(this.states[proxy].type.length > 0){
+            if(this.tempStates[proxy].type.length > 0){
                 const split = proxy.split(":");
                 const country = getCountryByIP(split[0]);
 
-                this.status.list[proxy] = {
+                this.state.list[proxy] = {
                     ip: split[0],
                     port: split[1],
-                    timeout: this.states[proxy].time,
-                    anon: this.states[proxy].anon,
-                    type: this.states[proxy].type,
+                    timeout: this.tempStates[proxy].time,
+                    anon: this.tempStates[proxy].anon,
+                    type: this.tempStates[proxy].type,
                     country: country.name,
                     flag: country.flag
                 }
             }
 
-            if(this.status.counter.proxies.done == this.status.counter.proxies.all){
-                store.dispatch({type: 'ADD_PROXY', list: this.status.list});
+            delete this.tempStates[proxy];
+
+            if(this.state.counter.proxies.done == this.state.counter.proxies.all){
+                store.dispatch({type: 'ADD_PROXY', list: this.state.list});
                 this.dispatchDone();
             }else{
                 this.next();
@@ -189,11 +204,18 @@ class Checker {
     }
 
     async check(dispatchDone) {
-        this.ip = await this.getIp();
+        try {
+            this.ip = await this.getIp();
+        } catch (error) {
+            alert("Ip lookup fail. Try later.");
+            dispatchDone();
+            return;
+        }
+        
         this.dispatchDone = dispatchDone;
         
-        this.status.counter.proxies.all = this.pool.queue.length;
-        store.dispatch({type: 'UP_STATUS', count: this.status.counter.proxies});
+        this.state.counter.proxies.all = this.pool.queue.length;
+        store.dispatch({type: 'UP_STATUS', count: this.state.counter.proxies});
         let startPoolThreadsCount = this.pool.queue.length > this.pool.limit ? this.pool.limit : this.pool.queue.length;
 
         setTimeout(() => {

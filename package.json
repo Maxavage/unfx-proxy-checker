@@ -1,7 +1,7 @@
 {
     "name": "electron_unfx_proxy_checker",
     "productName": "UNFX PROXY CHECKER",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "UNFX PROXY CHECKER",
     "main": "./src/index.js",
     "scripts": {
@@ -30,7 +30,8 @@
         "react-js-pagination": "^3.0.1",
         "react-redux": "^5.0.7",
         "redux": "^3.7.2",
-        "request": "^2.85.0"
+        "request": "^2.85.0",
+        "react-tabs": "^2.2.2"
     },
     "devDependencies": {
         "babel-plugin-transform-async-to-generator": "^6.24.1",
@@ -57,6 +58,7 @@
                 ]
             },
             "electronPackagerConfig": {
+                "name": "UNFX PROXY CHECKER",
                 "packageManager": "yarn",
                 "appCopyright": "© 2018 UNFORCEPROXY by ASSNCTR",
                 "electronVersion": "3.10.10",
@@ -64,16 +66,6 @@
                 "asar": true
             },
             "electronWinstallerConfig": {
-                "name": "UNFX PROXY CHECKER"
-            },
-            "electronInstallerDebian": {},
-            "electronInstallerRedhat": {},
-            "github_repository": {
-                "owner": "",
-                "name": ""
-            },
-            "windowsStoreConfig": {
-                "packageName": "",
                 "name": "UNFX PROXY CHECKER"
             }
         }

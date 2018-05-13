@@ -1,6 +1,7 @@
 import {createStore} from 'redux';
+import {getSettings} from './settings';
 
-const initState = {
+const initState = Object.assign({
     list: {},
     firstListState: {},
     count: {
@@ -11,7 +12,10 @@ const initState = {
         socks4: 0,
         socks5: 0
     }
-};
+}, 
+{
+    settings: getSettings()
+});
 
 let state = (state = initState, action) => {
     switch (action.type) {
