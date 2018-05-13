@@ -4,7 +4,7 @@ Unfx Proxy Checker - Free proxy checker (http, https, socks4, socks5). Sorting b
 ![](https://i.snag.gy/0slfPm.jpg)
 
 ```
-Current version 1.0.1
+Current version 1.0.2
 ```
 
 Download Latest Build:
