@@ -12,7 +12,7 @@ class Main extends React.Component {
         this.state = {
             list: "",
             showCheckList: false,
-            done: false,
+            done: false
         }
 
         this.settings = React.createRef();
