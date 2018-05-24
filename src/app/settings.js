@@ -12,8 +12,8 @@ const DEFAULT_SETTING = {
             validateString: '<h1>ProxyJudge.info</h1>'
         },
         ssl: {
-            url: 'https://judge.unforceproxy.ru/',
-            validateString: '<p>Unforceproxy - Proxy judge</p>'
+            url: 'https://www.yandex.ru/',
+            validateString: 'yandex.ru'
         }
     }
 }
