@@ -39,7 +39,7 @@ class Checker {
     getIp() {
         return new Promise((resolve, reject) => {
             request.get({
-                url: 'https://ip.unforceproxy.ru/', 
+                url: 'https://api.openproxy.space/ip', 
                 timeout: this.timeout, 
                 headers: {
                     'User-Agent': 'UNFX IP LOOKUP'
