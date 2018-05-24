@@ -60,7 +60,7 @@
             "electronPackagerConfig": {
                 "name": "UNFX PROXY CHECKER",
                 "packageManager": "yarn",
-                "appCopyright": "© 2018 UNFORCEPROXY by ASSNCTR",
+                "appCopyright": "© 2018 ost UNFORCEPROXY (openproxy.space) by ASSNCTR",
                 "electronVersion": "3.10.10",
                 "icon": "./public/icons/logo.png",
                 "asar": true
