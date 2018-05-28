@@ -1,12 +1,9 @@
 import React from 'react';
 import Export from './Export';
 
-const CheckList = (props) => {
+const CheckList = props => {
     const {list, show, counter, done, newChecking} = props;
-    if(!list){
-        return;
-    }
-    
+
     return(
         <div className="check-container">
             <div className={show ? "popup-check-list open" : "popup-check-list"}>

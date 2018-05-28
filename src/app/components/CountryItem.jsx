@@ -1,6 +1,6 @@
 import React from 'react';
 
-const CountryItem = (props) => {
+const CountryItem = props => {
     const {selected, count, name, toggle, changeAll} = props;
 
     return(

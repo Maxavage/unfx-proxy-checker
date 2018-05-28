@@ -36,7 +36,7 @@ const reduce = (list, params) => {
     let result = list;
 
     let reducers = {
-        country: function(list, countries){
+        country(list, countries){
             for(var i = 0, results = {}; i < countries.length; i++){
                 for(var key in list){
                     if(list[key].country == countries[i]){
@@ -47,7 +47,7 @@ const reduce = (list, params) => {
 
             return results;
         },
-        type: function(list, types){
+        type(list, types){
             for(var i = 0, results = {}; i < types.length; i++){
                 for(var key in list){
                     for(var is = 0; is < list[key].type.length; is++){
@@ -60,7 +60,7 @@ const reduce = (list, params) => {
 
             return results;
         },
-        anonymity: function(list, anons){
+        anonymity(list, anons){
             for(var i = 0, results = {}; i < anons.length; i++){
                 for(var key in list){
                     if(list[key].anon.toLowerCase() == anons[i]){

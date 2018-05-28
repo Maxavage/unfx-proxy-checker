@@ -5,10 +5,6 @@ import store from './store';
 import {Provider} from 'react-redux';
 
 class Index extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return(
             <Provider store={store}>

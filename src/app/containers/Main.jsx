@@ -6,8 +6,8 @@ import {ActionCheck} from '../actions/ActionCheck';
 import CheckList from '../containers/CheckList';
 
 class Main extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
         
         this.state = {
             list: "",

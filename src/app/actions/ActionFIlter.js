@@ -1,6 +1,6 @@
 import store from '../store';
 
-const typeToArray = (params) => {
+const typeToArray = params => {
     let result = [];
 
     for(const key in params) {
@@ -14,7 +14,7 @@ const typeToArray = (params) => {
 
 const anonToArray = typeToArray;
 
-const countryToArray = (params) => {
+const countryToArray = params => {
     let result = [];
 
     for(const key in params) {
@@ -26,7 +26,7 @@ const countryToArray = (params) => {
     return result;
 }
 
-export const ActionFilter = (params) => {
+export const ActionFilter = params => {
     const {type, anon, countries} = params;
     store.dispatch({type: 'FILTER', params: {type: typeToArray(type), country: countryToArray(countries), anon: anonToArray(anon)}});
 }

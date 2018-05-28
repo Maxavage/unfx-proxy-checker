@@ -7,8 +7,9 @@ import {ActionSaveList} from '../actions/ActionSaveList';
 import Pagination from "react-js-pagination";
 
 class Export extends React.PureComponent {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
+        
         this.state = {
             openOptions: false,
             activePage: 1

@@ -1,4 +1,4 @@
-export const uniq = (a) => {
+export const uniq = a => {
     let prims = {
             "boolean": {},
             "number": {},

@@ -22,7 +22,7 @@ class Checker {
         }
 
         this.tempStates = {
-            // for temporary checking states
+            // for temporary check states
             // this.initProxyState()
         }
 
@@ -38,19 +38,9 @@ class Checker {
 
     getIp() {
         return new Promise((resolve, reject) => {
-            request.get({
-                url: 'https://api.openproxy.space/ip', 
-                timeout: this.timeout, 
-                headers: {
-                    'User-Agent': 'UNFX IP LOOKUP'
-                }
-            }, 
+            request.get({url: 'https://api.openproxy.space/ip', timeout: this.timeout, headers: {'User-Agent': 'UNFX IP LOOKUP'}}, 
             (err, res) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(res.body);
-                }
+                err ? reject(err) : resolve(res.body);
             })
         })
     }
