@@ -97,29 +97,78 @@ class Export extends React.PureComponent {
                 />
                 <div className="proxy-list-droplets">
                 {
-                    Object.keys(list).slice((this.state.activePage*25)-25, this.state.activePage*25).map((item, index) => <ProxyListItem key={index} count={(this.state.activePage*25)-25 + index+1} ip={list[item].ip} port={list[item].port} type={list[item].type} anon={list[item].anon} country={list[item].country} flag={list[item].flag} timeout={list[item].timeout} />)                }
+                    Object.keys(list).slice((this.state.activePage*25)-25, this.state.activePage*25).map((item, index) => <ProxyListItem key={index} count={(this.state.activePage*25)-25 + index+1} {...list[item]} />)                }
                 </div>
                 <div className={this.state.openOptions ? "export-options open no-select" : "export-options"}>
                     <button className="close-button button-one" onClick={this.closeOptions.bind(this)}></button>
                     <div className="anon-select">
                         <h2>Anonymity</h2>
-                        <input className="checkbox-one" id="anon-transparent" type="checkbox" onClick={() => this.toggleAnon("transparent")} defaultChecked={this.options.anon.transparent} />
-                        <label htmlFor="anon-transparent">Transparent</label>
-                        <input className="checkbox-one" id="anon-anonymous" type="checkbox" onClick={() => this.toggleAnon("anonymous")} defaultChecked={this.options.anon.anonymous} />
-                        <label htmlFor="anon-anonymous">Anonymous</label>
-                        <input className="checkbox-one" id="anon-elite" type="checkbox" onClick={() => this.toggleAnon("elite")} defaultChecked={this.options.anon.elite} />
-                        <label htmlFor="anon-elite">Elite</label>
+                        <input className="inp-cbx" id="anon-transparent" type="checkbox" style={{display: 'none'}} onClick={() => this.toggleAnon("transparent")} defaultChecked={this.options.anon.transparent} />
+                        <label htmlFor="anon-transparent" className="cbx">
+                            <span>
+                                <svg width="12px" height="10px" viewBox="0 0 12 10">
+                                    <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                                </svg>
+                            </span>
+                            <span>Transparent</span>
+                        </label>
+                        <input className="inp-cbx" id="anon-anonymous" type="checkbox" style={{display: 'none'}} onClick={() => this.toggleAnon("anonymous")} defaultChecked={this.options.anon.anonymous} />
+                        <label htmlFor="anon-anonymous" className="cbx">
+                            <span>
+                                <svg width="12px" height="10px" viewBox="0 0 12 10">
+                                    <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                                </svg>
+                            </span>
+                            <span>Anonymous</span>
+                        </label>
+                        <input className="inp-cbx" id="anon-elite" type="checkbox" style={{display: 'none'}} onClick={() => this.toggleAnon("elite")} defaultChecked={this.options.anon.elite} />
+                        <label htmlFor="anon-elite" className="cbx">
+                            <span>
+                                <svg width="12px" height="10px" viewBox="0 0 12 10">
+                                    <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                                </svg>
+                            </span>
+                            <span>Elite</span>
+                        </label>
                     </div>
                     <div className="type-select">
                         <h2>Type</h2>
-                        <input className="checkbox-one" id="type-http" type="checkbox" onClick={() => this.toggleType("http")} defaultChecked={this.options.type.http} /> 
-                        <label htmlFor="type-http">Http</label> 
-                        <input className="checkbox-one" id="type-https" type="checkbox" onClick={() => this.toggleType("https")} defaultChecked={this.options.type.https} /> 
-                        <label htmlFor="type-https">Https</label> 
-                        <input className="checkbox-one" id="type-socks4" type="checkbox" onClick={() => this.toggleType("socks4")} defaultChecked={this.options.type.socks4} /> 
-                        <label htmlFor="type-socks4">Socks4</label> 
-                        <input className="checkbox-one" id="type-socks5" type="checkbox" onClick={() => this.toggleType("socks5")} defaultChecked={this.options.type.socks5} /> 
-                        <label htmlFor="type-socks5">Socks5</label>
+                        <input className="inp-cbx" id="type-http" type="checkbox" style={{display: 'none'}} onClick={() => this.toggleType("http")} defaultChecked={this.options.type.http} />
+                        <label htmlFor="type-http" className="cbx">
+                            <span>
+                                <svg width="12px" height="10px" viewBox="0 0 12 10">
+                                    <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                                </svg>
+                            </span>
+                            <span>Http</span>
+                        </label>
+                        <input className="inp-cbx" id="type-https" type="checkbox" style={{display: 'none'}} onClick={() => this.toggleType("https")} defaultChecked={this.options.type.https} />
+                        <label htmlFor="type-https" className="cbx">
+                            <span>
+                                <svg width="12px" height="10px" viewBox="0 0 12 10">
+                                    <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                                </svg>
+                            </span>
+                            <span>Https</span>
+                        </label>
+                        <input className="inp-cbx" id="type-socks4" type="checkbox" style={{display: 'none'}} onClick={() => this.toggleType("socks4")} defaultChecked={this.options.type.socks4} />
+                        <label htmlFor="type-socks4" className="cbx">
+                            <span>
+                                <svg width="12px" height="10px" viewBox="0 0 12 10">
+                                    <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                                </svg>
+                            </span>
+                            <span>Socks4</span>
+                        </label>
+                        <input className="inp-cbx" id="type-socks5" type="checkbox" style={{display: 'none'}} onClick={() => this.toggleType("socks5")} defaultChecked={this.options.type.socks5} />
+                        <label htmlFor="type-socks5" className="cbx">
+                            <span>
+                                <svg width="12px" height="10px" viewBox="0 0 12 10">
+                                    <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                                </svg>
+                            </span>
+                            <span>Socks5</span>
+                        </label>
                     </div>
                     <CountrySelect items={this.options.countries} applyCountries={this.applyCountries.bind(this)} />
                 </div>
