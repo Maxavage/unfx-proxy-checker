@@ -23,6 +23,16 @@ const validateJudgeOpts = opts => {
     throw new Error("Judge must be is a URL");
 }
 
+const validateCheckProtocols = checkProtocols => {
+    const enabledProtocols = Object.keys(checkProtocols).filter(protocol => checkProtocols[protocol]);
+
+    if (enabledProtocols.length > 0) {
+        return enabledProtocols;
+    }
+
+    throw new Error("Select protocols");
+}
+
 const parseInputProxyList = list => {
     try {
         return uniq(ProxyMethods.primitive(list));
@@ -47,13 +57,14 @@ export const ActionCheck = (list, opts, dispatchStart, dispatchDone) => {
                     url: opts.sslJudge,
                     validateString: opts.sslJudgeValidateString
                 }
-            });
+            }),
+            checkProtocols = validateCheckProtocols(opts.checkProtocols);
 
         dispatchStart();
-        const checker = new Checker(proxyList, coreOpts, judgeOpts);
-        checker.check(dispatchDone);
+        const checker = new Checker(proxyList, coreOpts, judgeOpts, checkProtocols);
+        checker.start(dispatchDone);
 
-        saveSettings(Object.assign({core: coreOpts, judges: judgeOpts}));
+        saveSettings({core: coreOpts, judges: judgeOpts, checkProtocols: opts.checkProtocols});
     } catch (error) {
         alert(error);
     }
