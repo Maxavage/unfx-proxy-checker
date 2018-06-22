@@ -15,6 +15,12 @@ const DEFAULT_SETTING = {
             url: 'https://www.yandex.ru/',
             validateString: 'yandex.ru'
         }
+    },
+    checkProtocols: {
+        http: true,
+        https: true,
+        socks4: true,
+        socks5: true
     }
 }
 
