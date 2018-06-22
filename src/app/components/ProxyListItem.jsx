@@ -6,15 +6,11 @@ class ProxyListItem extends React.PureComponent {
     }
 
     getTypeClass(type) {
-        if(type.join().match(/http/gi)){
-            return 'proxy-list-droplet http';
-        }
-
-        return 'proxy-list-droplet socks';
+        return type[0].match(/http/) ? 'proxy-list-droplet http' : 'proxy-list-droplet socks';
     }
 
     render() {
-        const {ip, port, type, anon, country, timeout, count, flag} = this.props;
+        const {ip, port, type, anon, country, city, timeout, count, flag} = this.props;
 
         return(
             <div className={this.getTypeClass(type)}>
@@ -26,6 +22,7 @@ class ProxyListItem extends React.PureComponent {
                 <div className="country">
                     <div className={`ico ${flag} png`}></div>
                     <div className="name">{country}</div>
+                    <div className="city" title={city}>{city}</div>
                 </div>
                 <div className="timeout">{timeout}</div>
             </div>
