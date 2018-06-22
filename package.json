@@ -1,73 +1,58 @@
 {
-    "name": "electron_unfx_proxy_checker",
-    "productName": "UNFX PROXY CHECKER",
-    "version": "1.0.2",
-    "description": "UNFX PROXY CHECKER",
-    "main": "./src/index.js",
-    "scripts": {
-        "start": "electron-forge start",
-        "package32": "electron-forge package --arch=ia32",
-        "package": "electron-forge package",
-        "make": "electron-forge make",
-        "publish": "electron-forge publish",
-        "devserv": "webpack-dev-server --debug --hot --devtool eval-source-map --output-pathinfo --watch --colors --inline --content-base public --port 4321 --host 127.0.0.1"
-    },
-    "repository": "github:assnctr/unfx-proxy-checker",
-    "keywords": ["proxy-list", "proxy", "proxy-checker"],
-    "author": "assnctr",
-    "license": "MIT",
-    "dependencies": {
-        "babel-core": "^6.26.0",
-        "babel-loader": "^7.1.3",
-        "check-types": "^7.3.0",
-        "electron-compile": "^6.4.2",
-        "electron-reload": "^1.2.2",
-        "electron-squirrel-startup": "^1.0.0",
-        "ip-country": "^1.0.2",
-        "proxy-agent": "^3.0.0",
-        "react": "^16.2.0",
-        "react-dom": "^16.2.0",
-        "react-js-pagination": "^3.0.1",
-        "react-redux": "^5.0.7",
-        "redux": "^3.7.2",
-        "request": "^2.85.0",
-        "react-tabs": "^2.2.2"
-    },
-    "devDependencies": {
-        "babel-plugin-transform-async-to-generator": "^6.24.1",
-        "babel-polyfill": "^6.26.0",
-        "babel-preset-env": "^1.6.1",
-        "babel-preset-react": "^6.24.1",
-        "babel-preset-stage-0": "^6.24.1",
-        "css-loader": "^0.28.10",
-        "electron-forge": "^5.1.1",
-        "electron-prebuilt-compile": "1.8.2",
-        "eslint": "^3",
-        "eslint-config-airbnb": "^15",
-        "eslint-plugin-import": "^2",
-        "eslint-plugin-jsx-a11y": "^5",
-        "eslint-plugin-react": "^7",
-        "webpack": "^4.1.0",
-        "webpack-dev-server": "^3.1.0"
-    },
-    "config": {
-        "forge": {
-            "make_targets": {
-                "win32": [
-                    "squirrel"
-                ]
-            },
-            "electronPackagerConfig": {
-                "name": "UNFX PROXY CHECKER",
-                "packageManager": "yarn",
-                "appCopyright": "© 2018 ost UNFORCEPROXY (openproxy.space) by ASSNCTR",
-                "electronVersion": "3.10.10",
-                "icon": "./public/icons/logo.png",
-                "asar": true
-            },
-            "electronWinstallerConfig": {
-                "name": "UNFX PROXY CHECKER"
-            }
-        }
-    }
+  "name": "electron_unfx_proxy_checker",
+  "productName": "UNFX PROXY CHECKER",
+  "version": "1.0.3",
+  "description": "UNFX PROXY CHECKER",
+  "main": "./src/index.js",
+  "scripts": {
+    "start": "electron-forge start",
+    "package32": "electron-forge package --arch=ia32",
+    "package": "electron-forge package"
+  },
+  "repository": "github:assnctr/unfx-proxy-checker",
+  "keywords": [
+    "proxy-list",
+    "proxy",
+    "proxy-checker"
+  ],
+  "author": "assnctr",
+  "license": "MIT",
+  "dependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.3",
+    "check-types": "^7.3.0",
+    "electron-compile": "^6.4.2",
+    "electron-reload": "^1.2.2",
+    "electron-squirrel-startup": "^1.0.0",
+    "electron-updater": "^2.21.10",
+    "ip-country": "^1.0.2",
+    "proxy-agent": "^3.0.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-js-pagination": "^3.0.1",
+    "react-redux": "^5.0.7",
+    "react-tabs": "^2.2.2",
+    "redux": "^3.7.2",
+    "request": "^2.85.0",
+    "request-progress": "^3.0.0",
+    "request-promise": "^4.2.2"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "css-loader": "^0.28.10",
+    "electron-forge": "^5.1.1",
+    "electron-prebuilt-compile": "1.8.2",
+    "eslint": "^3",
+    "eslint-config-airbnb": "^15",
+    "eslint-plugin-import": "^2",
+    "eslint-plugin-jsx-a11y": "^5",
+    "eslint-plugin-react": "^7"
+  },
+  "config": {
+    "forge": "forge.config.js"
+  }
 }
