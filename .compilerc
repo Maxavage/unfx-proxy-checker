@@ -4,9 +4,8 @@
       "application/javascript": {
         "presets": [
           ["env", { "targets": { "electron": "3.10" } }],
-          "react"
+          "react", "stage-0"
         ],
-        "plugins": ["transform-async-to-generator"],
         "sourceMaps": "inline"
       }
     },
@@ -14,9 +13,8 @@
       "application/javascript": {
         "presets": [
           ["env", { "targets": { "electron": "3.10" } }],
-          "react"
+          "react", "stage-0"
         ],
-        "plugins": ["transform-async-to-generator"],
         "sourceMaps": "none"
       }
     }
