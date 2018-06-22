@@ -4,6 +4,7 @@ import Settings from '../components/Settings';
 import InputProxyList from '../components/InputProxyList';
 import {ActionCheck} from '../actions/ActionCheck';
 import CheckList from '../containers/CheckList';
+import Update from '../components/Update';
 
 class Main extends React.Component {
     constructor() {
@@ -41,6 +42,7 @@ class Main extends React.Component {
     render() {
         return(
             <div className="content">
+                <Update />
                 <Settings
                     ref={this.settings}
                     settings={this.props.state.settings}
