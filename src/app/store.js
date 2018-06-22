@@ -6,11 +6,7 @@ const initState = Object.assign({
     firstListState: {},
     count: {
         all: 0,
-        done: 0,
-        http: 0,
-        https: 0,
-        socks4: 0,
-        socks5: 0
+        done: 0
     }
 }, 
 {
