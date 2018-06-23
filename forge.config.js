@@ -16,7 +16,7 @@ module.exports = {
         "name": "unfx-proxy-checker-v1.0.3",
         "packageManager": "yarn",
         "appCopyright": "© 2018 ost UNFORCEPROXY (openproxy.space) by ASSNCTR",
-        "icon": "./public/icons/logo.png",
+        "icon": "./public/icons/icon.ico",
         "asar": true
     }
 }
