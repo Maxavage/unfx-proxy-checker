@@ -7,7 +7,8 @@
   "scripts": {
     "start": "electron-forge start",
     "package32": "electron-forge package --arch=ia32",
-    "package": "electron-forge package"
+    "package64": "electron-forge package",
+    "package": "npm run package32 && npm run package64"
   },
   "repository": "github:assnctr/unfx-proxy-checker",
   "keywords": [
