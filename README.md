@@ -1,14 +1,15 @@
 # Unfx Proxy Checker
-Unfx Proxy Checker - Free proxy checker (http, https, socks4, socks5). Sorting by anonymity, country, type.
+Unfx Proxy Checker - Free proxy checker. Support protocols: http, https, socks4, socks5. Sorting by anonymity, country, type.
 
-![](https://i.snag.gy/0slfPm.jpg)
+![](https://openproxy.space/static/images/two-scr.png)
+![](https://openproxy.space/static/images/one-scr.png)
 
 ```
-Current version 1.0.2
+Current version 1.0.3
 ```
 
 Download Latest Build:
-[x32](https://openproxy.space/download/UNFX-PROXY-CHECKER-win32-ia32.rar), [x64](https://openproxy.space/download/UNFX-PROXY-CHECKER-win32-x64.rar)
+[x32](http://localhost:3000/download/unfx-proxy-checker-v1.0.3-win32-ia32.rar), [x64](http://localhost:3000/download/unfx-proxy-checker-v1.0.3-win32-x64.rar)
 
 ## Settings
 Threads
@@ -22,14 +23,22 @@ Timeout
 Min 1000
 Max 60000
 ```
+Selectable protocols
+```
+Selects protocols which will be checked.
+Http, Https, Socks4, Socks5.
+```
 
 ## Sorting
-Sorting by Anonymity, type, country.
+Sorting by anonymity, type, country.
 
 ## Export
 Export currently sorted proxy list.
 
-## You can see
+## Updates
+Simple checking at updates and downloading update. 
 
-* [Open proxy space](https://openproxy.space) - The largest open proxy list database.
+## Misc
+* [Open Proxy Space](https://openproxy.space) - The largest open proxy list database.
+* [Daily Proxy Lists](https://openproxy.space/lists/) - Daily updated proxy lists archive. Dump from database. Sorted by protocols.
 * [API documentation](https://openproxy.space/api) - Openproxy api - build own app based on our open proxy space
