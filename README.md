@@ -9,7 +9,7 @@ Current version 1.0.3
 ```
 
 Download Latest Build:
-[x32](http://localhost:3000/download/unfx-proxy-checker-v1.0.3-win32-ia32.rar), [x64](http://localhost:3000/download/unfx-proxy-checker-v1.0.3-win32-x64.rar)
+[x32](https://openproxy.space/download/unfx-proxy-checker-v1.0.3-win32-ia32.rar), [x64](https://openproxy.space/download/unfx-proxy-checker-v1.0.3-win32-x64.rar)
 
 ## Settings
 Threads
