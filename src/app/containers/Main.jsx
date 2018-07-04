@@ -31,8 +31,8 @@ class Main extends React.Component {
         this.setState({done: true});
     }
 
-    newChecking() {
-        this.setState({showCheckList: false, done: false});
+    newChecking(clearEvent) {
+        this.setState({showCheckList: false, done: false}, clearEvent);
     }
 
     readFromTxtDispatch(text) {
@@ -45,11 +45,9 @@ class Main extends React.Component {
                 <Update />
                 <Settings
                     ref={this.settings}
-                    settings={this.props.state.settings}
+                    settings={this.props.settings}
                 />
-                <CheckList 
-                    list={this.props.state.list} 
-                    counter={this.props.state.count} 
+                <CheckList
                     show={this.state.showCheckList} 
                     done={this.state.done} 
                     newChecking={this.newChecking.bind(this)}
@@ -65,4 +63,8 @@ class Main extends React.Component {
     }
 }
 
-export default connect(state => {return {state: state}})(Main);
+const mapStateToProps = state => ({
+    settings: state.settings
+});
+  
+export default connect(mapStateToProps)(Main);

@@ -1,8 +1,9 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import Export from './Export';
 
 const CheckList = props => {
-    const {list, show, counter, done, newChecking} = props;
+    const {show, counter, done, newChecking} = props;
 
     return(
         <div className="check-container">
@@ -29,7 +30,7 @@ const CheckList = props => {
                             <div className="proxy-score"><div className="score-bar" style={{width: Math.floor(counter.done/counter.all * 100) + "%"}}></div></div>
                             <h1 className="check-count">Checked proxies {counter.done} of {counter.all}</h1>
                         </div>
-                        {done ? <Export list={list} newChecking={newChecking} />: ""}
+                        {done ? <Export newChecking={newChecking} />: ""}
                     </div>
                 </div>
             </div>
@@ -37,4 +38,8 @@ const CheckList = props => {
     );
 }
 
-export default CheckList;
+const mapStateToProps = state => ({
+    counter: state.counter
+});
+  
+export default connect(mapStateToProps)(CheckList);
