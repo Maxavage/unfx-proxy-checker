@@ -6,6 +6,10 @@ const FETCH_CURRENT_VERSION_URL = 'https://api.openproxy.space/version/checker';
 export default class Updater {
     constructor() {
         this.currentVersion = app.getVersion();
+        this.noUpdates = {
+            status: false,
+            latestVersion: this.currentVersion
+        };
     }
 
     getLatestVersion() {
@@ -26,15 +30,9 @@ export default class Updater {
                 };
             }
 
-            return {
-                status: false,
-                latestVersion: this.currentVersion
-            };
+            return this.noUpdates;
         } catch (error) {
-            return {
-                status: false,
-                latestVersion: this.currentVersion
-            };
+            return this.noUpdates;
         }
     }
 }
