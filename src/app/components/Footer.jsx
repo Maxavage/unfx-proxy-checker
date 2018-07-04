@@ -1,6 +1,6 @@
 import React from 'react';
-import {shell} from 'electron';
-import {remote} from 'electron';
+import {shell, remote} from 'electron';
+
 const {app} = remote;
 
 const Footer = () => {

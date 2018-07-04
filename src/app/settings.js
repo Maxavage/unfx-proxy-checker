@@ -22,16 +22,16 @@ const DEFAULT_SETTING = {
         socks4: true,
         socks5: true
     }
-}
+};
 
 export const saveSettings = setting => {
     writeFile(FILE_NAME, JSON.stringify(setting), () => {});
-}
+};
 
 export const getSettings = () => {
-    if(existsSync(FILE_NAME)){
+    if (existsSync(FILE_NAME)) {
         return JSON.parse(readFileSync(FILE_NAME, 'utf8'));
     }
 
     return DEFAULT_SETTING;
-}
+};
