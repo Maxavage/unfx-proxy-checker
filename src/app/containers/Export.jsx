@@ -1,10 +1,12 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import ProxyListItem from '../components/ProxyListItem';
 import CountrySelect from '../containers/CountrySelect';
-import {ActionFilter} from '../actions/ActionFIlter';
-import {ActionNewChecking} from '../actions/ActionNewChecking';
+import {filter} from '../store/actions/filter';
+import {clear} from '../store/actions/clear';
 import {ActionSaveList} from '../actions/ActionSaveList';
 import Pagination from "react-js-pagination";
+import {getVisibleProxies} from '../store/selectors/getVisibleProxies';
 
 class Export extends React.PureComponent {
     constructor() {
@@ -16,12 +18,12 @@ class Export extends React.PureComponent {
         }
 
         this.options = {
-            anon: {
+            anons: {
                 transparent: true,
                 anonymous: true,
                 elite: true
             },
-            type: {
+            protocols: {
                 http: true,
                 https: true,
                 socks4: true,
@@ -31,34 +33,34 @@ class Export extends React.PureComponent {
         }
     }
 
-    openOptions () {
+    openOptions() {
         this.setState({openOptions: true});
     }
 
-    closeOptions () {
+    closeOptions() {
         this.setState({openOptions: false});
         this.applyOptions();
     }
 
-    createCountries (list) {
+    createCountries(list) {
         let countries = {};
 
-        for (const key in list) {
-            if(countries[list[key].country] == undefined){
-                countries[list[key].country] = {
+        list.forEach(item => {
+            if (countries[item.country.name] == undefined) {
+                countries[item.country.name] = {
                     state: true,
                     count: 1
                 };
-            }else{
-                countries[list[key].country].count++;
+            } else {
+                countries[item.country.name].count++;
             }
-        }
+        });
 
         this.options.countries = countries;
     }
     
     applyOptions() {
-        ActionFilter({type: this.options.type, anon: this.options.anon, countries: this.options.countries});
+        this.props.filter(this.options);
         this.changePage(1);
     }
 
@@ -72,38 +74,44 @@ class Export extends React.PureComponent {
     }
 
     toggleAnon(anon) {
-        this.options.anon[anon] = !this.options.anon[anon];
+        this.options.anons[anon] = !this.options.anons[anon];
     }
 
-    toggleType(type) {
-        this.options.type[type] = !this.options.type[type];
+    toggleProtocol(protocol) {
+        this.options.protocols[protocol] = !this.options.protocols[protocol];
     }
 
     changePage(number) {
         this.setState({activePage: number});
     }
 
+    clear() {
+        const {clear, newChecking} = this.props;
+        newChecking(clear);
+    }
+
     render() {
-        const {list, newChecking} = this.props;
+        const {list} = this.props;
         
         return(
             <div className="proxy-list-export">
                 <Pagination
                     activePage={this.state.activePage}
                     itemsCountPerPage={25}
-                    totalItemsCount={Object.keys(list).length}
+                    totalItemsCount={list.length}
                     pageRangeDisplayed={7}
                     onChange={this.changePage.bind(this)}
                 />
                 <div className="proxy-list-droplets">
                 {
-                    Object.keys(list).slice((this.state.activePage*25)-25, this.state.activePage*25).map((item, index) => <ProxyListItem key={index} count={(this.state.activePage*25)-25 + index+1} {...list[item]} />)                }
+                    list.slice((this.state.activePage*25)-25, this.state.activePage*25).map((item, index) => <ProxyListItem key={index} count={(this.state.activePage*25)-25 + index+1} {...item} />)
+                }
                 </div>
                 <div className={this.state.openOptions ? "export-options open no-select" : "export-options"}>
                     <button className="close-button button-one" onClick={this.closeOptions.bind(this)}></button>
                     <div className="anon-select">
                         <h2>Anonymity</h2>
-                        <input className="inp-cbx" id="anon-transparent" type="checkbox" style={{display: 'none'}} onClick={() => this.toggleAnon("transparent")} defaultChecked={this.options.anon.transparent} />
+                        <input className="inp-cbx" id="anon-transparent" type="checkbox" style={{display: 'none'}} onChange={() => this.toggleAnon("transparent")} defaultChecked={this.options.anons.transparent} />
                         <label htmlFor="anon-transparent" className="cbx">
                             <span>
                                 <svg width="12px" height="10px" viewBox="0 0 12 10">
@@ -112,7 +120,7 @@ class Export extends React.PureComponent {
                             </span>
                             <span>Transparent</span>
                         </label>
-                        <input className="inp-cbx" id="anon-anonymous" type="checkbox" style={{display: 'none'}} onClick={() => this.toggleAnon("anonymous")} defaultChecked={this.options.anon.anonymous} />
+                        <input className="inp-cbx" id="anon-anonymous" type="checkbox" style={{display: 'none'}} onChange={() => this.toggleAnon("anonymous")} defaultChecked={this.options.anons.anonymous} />
                         <label htmlFor="anon-anonymous" className="cbx">
                             <span>
                                 <svg width="12px" height="10px" viewBox="0 0 12 10">
@@ -121,7 +129,7 @@ class Export extends React.PureComponent {
                             </span>
                             <span>Anonymous</span>
                         </label>
-                        <input className="inp-cbx" id="anon-elite" type="checkbox" style={{display: 'none'}} onClick={() => this.toggleAnon("elite")} defaultChecked={this.options.anon.elite} />
+                        <input className="inp-cbx" id="anon-elite" type="checkbox" style={{display: 'none'}} onChange={() => this.toggleAnon("elite")} defaultChecked={this.options.anons.elite} />
                         <label htmlFor="anon-elite" className="cbx">
                             <span>
                                 <svg width="12px" height="10px" viewBox="0 0 12 10">
@@ -131,10 +139,10 @@ class Export extends React.PureComponent {
                             <span>Elite</span>
                         </label>
                     </div>
-                    <div className="type-select">
+                    <div className="protocols-select">
                         <h2>Type</h2>
-                        <input className="inp-cbx" id="type-http" type="checkbox" style={{display: 'none'}} onClick={() => this.toggleType("http")} defaultChecked={this.options.type.http} />
-                        <label htmlFor="type-http" className="cbx">
+                        <input className="inp-cbx" id="protocol-http" type="checkbox" style={{display: 'none'}} onChange={() => this.toggleProtocol("http")} defaultChecked={this.options.protocols.http} />
+                        <label htmlFor="protocol-http" className="cbx">
                             <span>
                                 <svg width="12px" height="10px" viewBox="0 0 12 10">
                                     <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
@@ -142,8 +150,8 @@ class Export extends React.PureComponent {
                             </span>
                             <span>Http</span>
                         </label>
-                        <input className="inp-cbx" id="type-https" type="checkbox" style={{display: 'none'}} onClick={() => this.toggleType("https")} defaultChecked={this.options.type.https} />
-                        <label htmlFor="type-https" className="cbx">
+                        <input className="inp-cbx" id="protocol-https" type="checkbox" style={{display: 'none'}} onChange={() => this.toggleProtocol("https")} defaultChecked={this.options.protocols.https} />
+                        <label htmlFor="protocol-https" className="cbx">
                             <span>
                                 <svg width="12px" height="10px" viewBox="0 0 12 10">
                                     <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
@@ -151,8 +159,8 @@ class Export extends React.PureComponent {
                             </span>
                             <span>Https</span>
                         </label>
-                        <input className="inp-cbx" id="type-socks4" type="checkbox" style={{display: 'none'}} onClick={() => this.toggleType("socks4")} defaultChecked={this.options.type.socks4} />
-                        <label htmlFor="type-socks4" className="cbx">
+                        <input className="inp-cbx" id="protocol-socks4" type="checkbox" style={{display: 'none'}} onChange={() => this.toggleProtocol("socks4")} defaultChecked={this.options.protocols.socks4} />
+                        <label htmlFor="protocol-socks4" className="cbx">
                             <span>
                                 <svg width="12px" height="10px" viewBox="0 0 12 10">
                                     <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
@@ -160,8 +168,8 @@ class Export extends React.PureComponent {
                             </span>
                             <span>Socks4</span>
                         </label>
-                        <input className="inp-cbx" id="type-socks5" type="checkbox" style={{display: 'none'}} onClick={() => this.toggleType("socks5")} defaultChecked={this.options.type.socks5} />
-                        <label htmlFor="type-socks5" className="cbx">
+                        <input className="inp-cbx" id="protocol-socks5" type="checkbox" style={{display: 'none'}} onChange={() => this.toggleProtocol("socks5")} defaultChecked={this.options.protocols.socks5} />
+                        <label htmlFor="protocol-socks5" className="cbx">
                             <span>
                                 <svg width="12px" height="10px" viewBox="0 0 12 10">
                                     <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
@@ -178,11 +186,24 @@ class Export extends React.PureComponent {
                         <path d="M239.4,136.001c-57,0-103.3,46.3-103.3,103.3s46.3,103.3,103.3,103.3s103.3-46.3,103.3-103.3S296.4,136.001,239.4,136.001    z M239.4,315.601c-42.1,0-76.3-34.2-76.3-76.3s34.2-76.3,76.3-76.3s76.3,34.2,76.3,76.3S281.5,315.601,239.4,315.601z" />
                     </svg>
                 </button>
-                <button className="button-two save-button" onClick={ActionSaveList}>Save</button>
-                <button className="button-two new-check-button" onClick={() => ActionNewChecking(newChecking)}>Close</button>
+                <button className="button-two save-button" onClick={() => ActionSaveList(list)}>Save</button>
+                <button className="button-two new-check-button" onClick={this.clear.bind(this)}>Close</button>
             </div>
         );
     }
 }
 
-export default Export;
+const mapStateToProps = state => ({
+    list: getVisibleProxies(state)
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    filter(options) {
+        dispatch(filter(options));
+    },
+    clear() {
+        dispatch(clear);
+    }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Export);

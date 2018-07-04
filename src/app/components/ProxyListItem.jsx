@@ -5,26 +5,38 @@ class ProxyListItem extends React.PureComponent {
         super(props);
     }
 
-    getTypeClass(type) {
-        return type[0].match(/http/) ? 'proxy-list-droplet http' : 'proxy-list-droplet socks';
+    getClass(protocols) {
+        return protocols[0].match(/http/) ? 'proxy-list-droplet http' : 'proxy-list-droplet socks';
+    }
+
+    getTimeout(timeouts) {
+        return timeouts.reduce((a, b) => a + b) / timeouts.length;
     }
 
     render() {
-        const {ip, port, type, anon, country, city, timeout, count, flag} = this.props;
+        const {ip, port, protocols, anons, country, timeouts, count} = this.props;
 
         return(
-            <div className={this.getTypeClass(type)}>
-                <div className="count">{count}</div>
+            <div className={this.getClass(protocols)}>
+                <div className="count" title={count}>{count}</div>
                 <div className="ip">{ip}</div>
                 <div className="port">{port}</div>
-                <div className="type">{type.join(", ")}</div>
-                <div className="anon">{anon}</div>
-                <div className="country">
-                    <div className={`ico ${flag} png`}></div>
-                    <div className="name">{country}</div>
-                    <div className="city" title={city}>{city}</div>
+                <div className="protocols">
+                {
+                    protocols.map((protocol, index) => <div className="protocol" key={index}>{protocol}</div>)
+                }
                 </div>
-                <div className="timeout">{timeout}</div>
+                <div className="anons">
+                {
+                    anons.map((anon, index) => <div className="anon" key={index}>{anon}</div>)
+                }
+                </div>
+                <div className="country">
+                    <div className={`ico ${country.flag} png`}></div>
+                    <div className="name">{country.name}</div>
+                    <div className="city" title={country.city}>{country.city}</div>
+                </div>
+                <div className="timeout">{this.getTimeout(timeouts)}</div>
             </div>
         );
     }
