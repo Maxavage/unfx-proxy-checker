@@ -1,20 +1,8 @@
-import store from '../store';
 import {writeFile} from "fs";
 import {remote} from "electron";
 const {dialog} = remote;
 
-const getList = () => {
-    const list = store.getState().list;
-    let result = "";
-
-    for(const key in list) {
-        result += list[key].ip + ":" + list[key].port + "\r\n";
-    }
-
-    return result;
-}
-
-export const ActionSaveList = () => {
+export const ActionSaveList = (list) => {
     let savePath = dialog.showSaveDialog({
         filters: [{
             name: 'Text Files',
@@ -26,5 +14,5 @@ export const ActionSaveList = () => {
         return;
     }
 
-    writeFile(savePath, getList(), function(err) {});
+    writeFile(savePath, list.map(item => `${item.ip}:${item.port}`).join('\r\n'), (err) => {});
 }
