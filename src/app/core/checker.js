@@ -1,15 +1,14 @@
 import rp from 'request-promise';
-import ProxyAgent from "proxy-agent";
-import store from '../store';
+import ProxyAgent from 'proxy-agent';
+import store from '../store/index';
+import {uniq} from '../misc/uniq';
 import {getCountryByIP} from './country/main';
 import {EventEmitter} from 'events';
 EventEmitter.defaultMaxListeners = 0;
 
 class Checker {
     constructor(proxies, options, judges, checkProtocols) {
-        this.list = {
-            // for complete proxies state
-        };
+        this.list = []; // for complete proxies state
         this.checkProtocols = checkProtocols;
         this.doneLevel = checkProtocols.length;
         this.tempStates = {
@@ -81,25 +80,25 @@ class Checker {
         return rp.get({url: 'https://api.openproxy.space/ip', timeout: 15000, headers: {'User-Agent': 'UNFX IP LOOKUP'}});
     }
 
-    initProxyState(proxy) {
+    initTempState(proxy) {
         this.tempStates[proxy] = {
-            time: 0,
-            anon: null,
+            timeouts: [],
+            anons: [],
             doneLevel: 0,
-            type: []
+            protocols: []
         }
     }
 
     getAnon(text) {
-        if(text.match(new RegExp(this.ip, 'g'))){
-            return "Transparent";
+        if (text.match(new RegExp(this.ip, 'g'))) {
+            return 'transparent';
         }
 
-        if(text.match(new RegExp('HTTP_VIA', 'g'))){
-            return "Anonymous";
+        if (text.match(new RegExp('HTTP_VIA', 'g'))) {
+            return 'anonymous';
         }
 
-        return "Elite";
+        return 'elite';
     }
 
     isMaxed() {
@@ -116,14 +115,14 @@ class Checker {
     }
 
     onResponse(response, proxy, type, judge) {
-        this.tempStates[proxy].doneLevel++;
         if (this.validateResponse(response.body, judge)) {
-            this.tempStates[proxy].time = response.elapsedTime;
-            this.tempStates[proxy].type.push(type);
+            this.tempStates[proxy].timeouts.push(response.elapsedTime);
+            this.tempStates[proxy].protocols.push(type);
+            this.tempStates[proxy].anons.push(this.getAnon(response.body));
             this.counter[type]++;
-            this.tempStates[proxy].anon = this.getAnon(response.body);
         }
 
+        this.tempStates[proxy].doneLevel++;
         this.isDone(proxy);
     }
 
@@ -164,36 +163,38 @@ class Checker {
     }
 
     isDone(proxy) {
-        store.dispatch({type: 'UP_STATUS', count: this.counter});
-        
         if(this.tempStates[proxy].doneLevel == this.doneLevel){
             this.counter.done++;
-
-            if(this.tempStates[proxy].type.length > 0){
+            
+            if(this.tempStates[proxy].protocols.length > 0){
                 const split = proxy.split(":");
                 const country = getCountryByIP(split[0]);
-
-                this.list[proxy] = {
+                
+                this.list.push({
                     ip: split[0],
                     port: split[1],
-                    timeout: this.tempStates[proxy].time,
-                    anon: this.tempStates[proxy].anon,
-                    type: this.tempStates[proxy].type,
-                    country: country.name,
-                    city: country.city,
-                    flag: country.flag
-                }
+                    timeouts: this.tempStates[proxy].timeouts,
+                    anons: uniq(this.tempStates[proxy].anons),
+                    protocols: this.tempStates[proxy].protocols,
+                    country: {
+                        name: country.name,
+                        city: country.city,
+                        flag: country.flag
+                    }
+                });
             }
-
+            
             delete this.tempStates[proxy];
-
-            if(this.counter.done == this.counter.all){
+            
+            if (this.counter.done == this.counter.all) {
                 store.dispatch({type: 'ADD_PROXY', list: this.list});
                 this.dispatchDone();
-            }else{
+            } else {
                 this.next();
             }
         }
+
+        store.dispatch({type: 'UP_STATUS', counter: this.counter});
     }
 
     run() {
@@ -203,7 +204,7 @@ class Checker {
 
         this.pool.running++;
         const proxy = this.pool.queue.shift();
-        this.initProxyState(proxy);
+        this.initTempState(proxy);
         this.check.call(this, proxy);
     }
 
@@ -218,7 +219,7 @@ class Checker {
         
         this.dispatchDone = dispatchDone;
         this.counter.all = this.pool.queue.length;
-        store.dispatch({type: 'UP_STATUS', count: this.counter});
+        store.dispatch({type: 'UP_STATUS', counter: this.counter});
         let startPoolThreadsCount = this.pool.queue.length > this.pool.limit ? this.pool.limit : this.pool.queue.length;
 
         setTimeout(() => {
