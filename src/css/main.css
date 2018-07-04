@@ -399,10 +399,24 @@ button {
     width: 10%;
 }
 
-.proxy-list-droplet .anon {
+.proxy-list-droplet .anons {
     padding: 1em;
     float: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     width: 15%;
+    text-transform: capitalize;
+}
+
+.proxy-list-droplet .anons .anon {
+    display: inline;
+}
+
+.proxy-list-droplet .anons .anon:not(:last-child):after {
+    content: ',';
+    color: #8c99a7;
+    margin-right: 0.25em;
 }
 
 .proxy-list-droplet .country {
@@ -455,7 +469,7 @@ button {
     width: 10%;
 }
 
-.proxy-list-droplet .type {
+.proxy-list-droplet .protocols {
     padding: 1em;
     float: left;
     white-space: nowrap;
@@ -464,6 +478,16 @@ button {
     display: block;
     width: 15%;
     text-transform: capitalize;
+}
+
+.proxy-list-droplet .protocols .protocol {
+    display: inline;
+}
+
+.proxy-list-droplet .protocols .protocol:not(:last-child):after {
+    content: ',';
+    color: #8c99a7;
+    margin-right: 0.25em;
 }
 
 .close-big-button {
