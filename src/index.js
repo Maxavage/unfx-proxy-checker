@@ -4,7 +4,7 @@ if (require('electron-squirrel-startup')) {
     app.quit();
 }
 
-const DEV = true;
+const DEV = false;
 let window;
 
 const devWindow = () => {
