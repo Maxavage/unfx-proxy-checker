@@ -12,7 +12,9 @@ const initialState = {
 const counter = (state = initialState, action) => {
     switch (action.type) {
         case 'UP_STATUS':
-            return {...state, ...action.counter};
+            return { ...state, ...action.counter };
+        case 'CLEAR':
+            return initialState;
         default:
             return state;
     }
