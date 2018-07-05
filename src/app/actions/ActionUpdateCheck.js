@@ -13,9 +13,9 @@ export const ActionUpdateCheck = async (dispatch, close) => {
                 updateDescription: details.updateDescription,
                 updateFeatures: details.updateFeatures,
                 downloads: details.downloads
-            });    
+            });
         } else {
             close();
         }
     }, 1500);
-}
+};

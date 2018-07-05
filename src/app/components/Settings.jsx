@@ -1,9 +1,10 @@
 import React from 'react';
-import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 class Settings extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {
             threads: this.props.settings.core.threads,
             timeout: this.props.settings.core.timeout,
@@ -16,15 +17,15 @@ class Settings extends React.Component {
     }
 
     changeInput(e) {
-        this.setState({[e.target.name]: e.target.value});
+        this.setState({ [e.target.name]: e.target.value });
     }
 
     toggleProtocol(e) {
-        this.setState({checkProtocols: {...this.state.checkProtocols, [e.target.name]: !this.state.checkProtocols[e.target.name]}});
+        this.setState({ checkProtocols: { ...this.state.checkProtocols, [e.target.name]: !this.state.checkProtocols[e.target.name] } });
     }
 
     render() {
-        return(
+        return (
             <div className="settings no-select">
                 <Tabs>
                     <TabList>
@@ -36,7 +37,7 @@ class Settings extends React.Component {
                             <div className="row">
                                 <div className="col col-span-1">
                                     <h1 className="small">Protocols:</h1>
-                                    <input type="checkbox" id="http-protocol" className="inp-cbx" style={{display: 'none'}} name="http" checked={this.state.checkProtocols.http} onChange={this.toggleProtocol.bind(this)}/>
+                                    <input type="checkbox" id="http-protocol" className="inp-cbx" style={{ display: 'none' }} name="http" checked={this.state.checkProtocols.http} onChange={this.toggleProtocol.bind(this)} />
                                     <label htmlFor="http-protocol" className="cbx">
                                         <span>
                                             <svg width="12px" height="10px" viewBox="0 0 12 10">
@@ -45,7 +46,7 @@ class Settings extends React.Component {
                                         </span>
                                         <span>Http</span>
                                     </label>
-                                    <input type="checkbox" id="https-protocol" className="inp-cbx" style={{display: 'none'}} name="https" checked={this.state.checkProtocols.https} onChange={this.toggleProtocol.bind(this)}/>
+                                    <input type="checkbox" id="https-protocol" className="inp-cbx" style={{ display: 'none' }} name="https" checked={this.state.checkProtocols.https} onChange={this.toggleProtocol.bind(this)} />
                                     <label htmlFor="https-protocol" className="cbx">
                                         <span>
                                             <svg width="12px" height="10px" viewBox="0 0 12 10">
@@ -54,7 +55,7 @@ class Settings extends React.Component {
                                         </span>
                                         <span>Https</span>
                                     </label>
-                                    <input type="checkbox" id="socks4-protocol" className="inp-cbx" style={{display: 'none'}} name="socks4" checked={this.state.checkProtocols.socks4} onChange={this.toggleProtocol.bind(this)}/>
+                                    <input type="checkbox" id="socks4-protocol" className="inp-cbx" style={{ display: 'none' }} name="socks4" checked={this.state.checkProtocols.socks4} onChange={this.toggleProtocol.bind(this)} />
                                     <label htmlFor="socks4-protocol" className="cbx">
                                         <span>
                                             <svg width="12px" height="10px" viewBox="0 0 12 10">
@@ -63,7 +64,7 @@ class Settings extends React.Component {
                                         </span>
                                         <span>Socks4</span>
                                     </label>
-                                    <input type="checkbox" id="socks5-protocol" className="inp-cbx" style={{display: 'none'}} name="socks5" checked={this.state.checkProtocols.socks5} onChange={this.toggleProtocol.bind(this)}/>
+                                    <input type="checkbox" id="socks5-protocol" className="inp-cbx" style={{ display: 'none' }} name="socks5" checked={this.state.checkProtocols.socks5} onChange={this.toggleProtocol.bind(this)} />
                                     <label htmlFor="socks5-protocol" className="cbx">
                                         <span>
                                             <svg width="12px" height="10px" viewBox="0 0 12 10">

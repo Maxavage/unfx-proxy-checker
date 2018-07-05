@@ -1,8 +1,8 @@
 import Checker from '../core/checker';
-import {uniq} from '../misc/uniq';
-import {ProxyMethods, UrlMethods} from '../misc/methods';
+import { uniq } from '../misc/uniq';
+import { ProxyMethods, UrlMethods } from '../misc/methods';
 import check from 'check-types';
-import {saveSettings} from '../settings';
+import { saveSettings } from '../settings';
 
 const validateCoreOpts = opts => {
     opts.threads = parseInt(opts.threads);
@@ -12,16 +12,16 @@ const validateCoreOpts = opts => {
         return opts;
     }
 
-    throw new Error("Min threads 1, Max 1000. Min timeout 1000, Max 60000");
-}
+    throw new Error('Min threads 1, Max 1000. Min timeout 1000, Max 60000');
+};
 
 const validateJudgeOpts = opts => {
     if (UrlMethods.primitive(opts.usual.url) && UrlMethods.primitive(opts.ssl.url)) {
         return opts;
     }
-    
-    throw new Error("Judge must be is a URL");
-}
+
+    throw new Error('Judge must be is a URL');
+};
 
 const validateCheckProtocols = checkProtocols => {
     const enabledProtocols = Object.keys(checkProtocols).filter(protocol => checkProtocols[protocol]);
@@ -30,22 +30,22 @@ const validateCheckProtocols = checkProtocols => {
         return enabledProtocols;
     }
 
-    throw new Error("Select protocols");
-}
+    throw new Error('Select protocols');
+};
 
 const parseInputProxyList = list => {
     try {
         return uniq(ProxyMethods.primitive(list));
     } catch (error) {
-        throw new Error("No proxies found");
+        throw new Error('No proxies found');
     }
-}
+};
 
 export const ActionCheck = (list, opts, dispatchStart, dispatchDone) => {
     try {
         let proxyList = parseInputProxyList(list),
             coreOpts = validateCoreOpts({
-                threads: opts.threads, 
+                threads: opts.threads,
                 timeout: opts.timeout
             }),
             judgeOpts = validateJudgeOpts({
@@ -64,8 +64,8 @@ export const ActionCheck = (list, opts, dispatchStart, dispatchDone) => {
         const checker = new Checker(proxyList, coreOpts, judgeOpts, checkProtocols);
         checker.start(dispatchDone);
 
-        saveSettings({core: coreOpts, judges: judgeOpts, checkProtocols: opts.checkProtocols});
+        saveSettings({ core: coreOpts, judges: judgeOpts, checkProtocols: opts.checkProtocols });
     } catch (error) {
         alert(error);
     }
-}
+};

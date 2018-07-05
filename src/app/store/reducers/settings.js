@@ -1,4 +1,4 @@
-import {getSettings} from '../../settings';
+import { getSettings } from '../../settings';
 
 const settings = (state = getSettings(), action) => {
     switch (action.type) {

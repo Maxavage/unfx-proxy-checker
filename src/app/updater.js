@@ -1,6 +1,6 @@
 import rp from 'request-promise';
-import {remote} from 'electron';
-const {app} = remote;
+import { remote } from 'electron';
+const { app } = remote;
 const FETCH_CURRENT_VERSION_URL = 'https://api.openproxy.space/version/checker';
 
 export default class Updater {
@@ -13,7 +13,7 @@ export default class Updater {
     }
 
     getLatestVersion() {
-        return rp.get({url: FETCH_CURRENT_VERSION_URL, json: true, timeout: 15000, headers: {'User-Agent': 'UNFX VERSION LOOKUP'}});
+        return rp.get({ url: FETCH_CURRENT_VERSION_URL, json: true, timeout: 15000, headers: { 'User-Agent': 'UNFX VERSION LOOKUP' } });
     }
 
     async checkAtAvailable() {

@@ -5,18 +5,18 @@ const initialState = {
         anons: 'all',
         countries: 'all'
     }
-}
+};
 
 const list = (state = initialState, action) => {
     switch (action.type) {
         case 'ADD_PROXY':
             return {
-                ...state, 
+                ...state,
                 items: action.list
             };
         case 'SET_FILTER':
             return {
-                ...state, 
+                ...state,
                 filter: {
                     protocols: action.params.protocols,
                     anons: action.params.anons,

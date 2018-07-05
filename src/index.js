@@ -1,10 +1,10 @@
-import {app, BrowserWindow} from 'electron';
+import { app, BrowserWindow } from 'electron';
 
 if (require('electron-squirrel-startup')) {
     app.quit();
 }
 
-const DEV = false;
+const DEV = true;
 let window;
 
 const devWindow = () => {
@@ -15,7 +15,7 @@ const devWindow = () => {
     });
 
     window.webContents.openDevTools();
-}
+};
 
 const prodWindow = () => {
     window = new BrowserWindow({
@@ -23,10 +23,10 @@ const prodWindow = () => {
         height: 760,
         show: false,
         resizable: false
-    })
+    });
 
     window.setMenu(null);
-}
+};
 
 const createWindow = () => {
     DEV ? devWindow() : prodWindow();

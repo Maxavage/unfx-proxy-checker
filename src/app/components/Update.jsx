@@ -1,6 +1,6 @@
 import React from 'react';
-import {ActionUpdateCheck} from '../actions/ActionUpdateCheck';
-import {ActionDownload} from '../actions/ActionDownload';
+import { ActionUpdateCheck } from '../actions/ActionUpdateCheck';
+import { ActionDownload } from '../actions/ActionDownload';
 
 export default class Update extends React.Component {
     constructor() {
@@ -17,19 +17,19 @@ export default class Update extends React.Component {
     }
 
     close() {
-        this.setState({opened: false});
+        this.setState({ opened: false });
     }
 
     onDownloadProgress(progress) {
-        this.setState({downloadProgress: progress * 100});
+        this.setState({ downloadProgress: progress * 100 });
     }
 
     onDownloadStart() {
-        this.setState({onDownloading: true});
+        this.setState({ onDownloading: true });
     }
 
     onDownloadDone() {
-        this.setState({isDownloaded: true, opened: false});
+        this.setState({ isDownloaded: true, opened: false });
     }
 
     componentWillMount() {
@@ -37,9 +37,9 @@ export default class Update extends React.Component {
     }
 
     render() {
-        return(
+        return (
             // WUTAFACE
-            <div className={this.state.opened ? this.state.onDownloading ? "update-notify downloading" : this.state.isChecking ? "update-notify checking" : "update-notify" : "update-notify closed"}>
+            <div className={this.state.opened ? this.state.onDownloading ? 'update-notify downloading' : this.state.isChecking ? 'update-notify checking' : 'update-notify' : 'update-notify closed'}>
                 <div className="lds-ripple"><div></div><div></div></div>
                 {
                     this.state.updateIsAvailable ?

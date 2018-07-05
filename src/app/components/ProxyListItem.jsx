@@ -14,9 +14,9 @@ class ProxyListItem extends React.PureComponent {
     }
 
     render() {
-        const {ip, port, protocols, anons, country, timeouts, count} = this.props;
+        const { ip, port, protocols, anons, country, timeouts, count } = this.props;
 
-        return(
+        return (
             <div className={this.getClass(protocols)}>
                 <div className="count" title={count}>{count}</div>
                 <div className="ip">{ip}</div>

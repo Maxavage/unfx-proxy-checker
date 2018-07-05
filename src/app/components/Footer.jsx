@@ -1,7 +1,7 @@
 import React from 'react';
-import {shell, remote} from 'electron';
+import { shell, remote } from 'electron';
 
-const {app} = remote;
+const { app } = remote;
 
 const Footer = () => {
     return (

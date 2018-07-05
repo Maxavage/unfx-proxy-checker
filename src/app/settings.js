@@ -1,4 +1,4 @@
-import {writeFile, readFileSync, existsSync} from "fs";
+import { writeFile, readFileSync, existsSync } from 'fs';
 
 const FILE_NAME = 'settings.unfx';
 const DEFAULT_SETTING = {
