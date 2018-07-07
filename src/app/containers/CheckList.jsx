@@ -2,9 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Export from './Export';
 
-const CheckList = props => {
-    const { show, counter, done, newChecking } = props;
-
+const CheckList = ({ show, counter, done, newChecking }) => {
     return (
         <div className="check-container">
             <div className={show ? 'popup-check-list open' : 'popup-check-list'}>
