@@ -5,6 +5,7 @@ import InputProxyList from '../components/InputProxyList';
 import { ActionCheck } from '../actions/ActionCheck';
 import CheckList from '../containers/CheckList';
 import Update from '../components/Update';
+import Footer from '../components/Footer';
 
 class Main extends React.Component {
     constructor() {
@@ -47,6 +48,7 @@ class Main extends React.Component {
                 <CheckList show={this.state.showCheckList} done={this.state.done} newChecking={this.newChecking.bind(this)} />
                 <InputProxyList onInputEvent={this.onInputProxyEvent.bind(this)} content={this.state.list} load={this.readFromTxtDispatch.bind(this)} />
                 <button className="button-two check-button" onClick={() => ActionCheck(this.state.list, this.settings.current.state, this.dispatchOnStartChecking.bind(this), this.dispatchOnDoneChecking.bind(this))}>Check</button>
+                <Footer />
             </div>
         );
     }

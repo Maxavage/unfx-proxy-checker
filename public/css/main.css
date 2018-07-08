@@ -37,7 +37,10 @@ button {
     max-width: 1600px;
     background-color: #fff;
     overflow: hidden;
-    padding-bottom: 1em;
+}
+
+.footer {
+    margin-top: 1em;
 }
 
 .proxy-score {
