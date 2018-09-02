@@ -3,7 +3,7 @@ Unfx Proxy Checker - Open source proxy checker built on (Electron/React/Redux).
 
 With configured hot module replacement. You can be use as electron-react-redux-postcss template.
 
-![](https://openproxy.space/static/images/unfx1.1.gif)
+![](https://github.com/assnctr/unfx-proxy-checker/blob/master/public/unfx.gif?raw=true)
 
 ```
 Current version 1.1.0
