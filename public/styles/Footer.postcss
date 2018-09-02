@@ -1,0 +1,96 @@
+:root {
+    --green-color: #31bc86;
+    --grey-color: #ddd;
+}
+
+.footer {
+    padding: 2em;
+    border-top: 1px solid color-mod(var(--green-color) alpha(15%));
+    display: flex;
+
+    & .marks {
+        display: flex;
+        align-items: center;
+        width: 50%;
+        
+        & .copyright,
+        & a {
+            color: var(--grey-color);
+        }
+
+        & h4 {
+            margin: 0;
+            color: color-mod(var(--green-color) alpha(75%));
+        }
+        
+        & a {
+            font-weight: 900;
+            margin-right: 1em;
+            
+            &:hover {
+                text-decoration: underline;
+                color: color-mod(var(--green-color) alpha(100%));
+            }
+        }
+
+        & span, 
+        & a {
+            color: color-mod(var(--green-color) alpha(50%));
+        }
+
+        & * {
+            display: inline-block;
+            margin-right: 0.5em;
+        }
+    }
+
+    & .socials {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        width: 50%;
+
+        & a {
+            &:not(:last-child) {
+                margin-right: 2em;
+            }
+        }
+
+        & svg {
+            height: 1.5em;
+            width: 1.5em;
+            cursor: pointer;
+            fill: var(--grey-color);
+
+            &.donate-svg,
+            &.fb-svg {
+                padding: 0.15em;
+            }
+
+            &.donate-svg {
+                &:hover path {
+                    fill: var(--green-color);
+                }
+            }
+
+            &.fb-svg {
+                &:hover path {
+                    fill: #3B5998;
+                }
+            }
+
+            &:hover.vk-svg path{
+                fill: #436EAB;
+            }
+
+            &:hover.github-svg path{
+                fill: #333;
+            }
+
+            &:hover.g-plus-svg path{
+                fill: #F34A38;
+            }
+        }
+
+    }
+}
