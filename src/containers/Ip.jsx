@@ -23,10 +23,10 @@ const Ip = ({ status }) => {
             </div>
         </div>
     );
-}
+};
 
 const mapStateToProps = state => ({
     status: state.ip
-});
+})
 
 export default connect(mapStateToProps)(Ip);

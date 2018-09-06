@@ -8,7 +8,7 @@ class Update extends React.PureComponent {
     componentWillMount = () => {
         const { checkAtAvailable } = this.props;
         checkAtAvailable();
-    }
+    };
 
     render = () => {
         const {
@@ -58,7 +58,7 @@ class Update extends React.PureComponent {
                 }
             </div>
         );
-    }
+    };
 }
 
 const mapStateToProps = state => ({

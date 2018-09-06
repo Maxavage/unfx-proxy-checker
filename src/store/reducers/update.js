@@ -14,19 +14,16 @@ const update = (state = initialState, action) => {
                 ...state,
                 ...action.nextState
             };
-        
         case 'UPDATE_UP_DOWNLOAD_PROGRESS':
             return {
                 ...state,
                 downloadProgress: action.percent
             };
-
         case 'UPDATE_CLOSE':
             return {
                 ...state,
                 isOpened: false
             };
-
         default:
             return state;
     }

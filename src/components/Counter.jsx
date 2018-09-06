@@ -28,7 +28,9 @@ const Counter = ({ all, done, protocols }) => {
             <div className="progress">
                 <div className="bar" style={progressStyle} />
             </div>
-            <h1>Checked proxies {done} of {all}</h1>
+            <h1>
+                Checked proxies {done} of {all}
+            </h1>
         </div>
     );
 };

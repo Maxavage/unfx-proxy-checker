@@ -43,7 +43,7 @@ const createCountries = items => {
     });
 
     return countries;
-}
+};
 
 export const addResult = (items, extra) => ({
     type: 'ADD_RESULT',
@@ -87,7 +87,7 @@ export const toggleCountry = (country, all) => (dispatch, getState) => {
     dispatch({
         type: 'TOGGLE_COUNTRY',
         countries 
-    })
+    });
 };
 
 export const loadMore = () => ({

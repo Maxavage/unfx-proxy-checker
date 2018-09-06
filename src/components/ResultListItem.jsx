@@ -10,7 +10,7 @@ class ResultListItem extends React.PureComponent {
         e.stopPropagation();
 
         if (!e.ctrlKey) {
-            this.setState({ isDataOpened: !this.state.isDataOpened })
+            this.setState({ isDataOpened: !this.state.isDataOpened });
         }
     };
 
@@ -24,43 +24,41 @@ export class ResultListItemWithSignatures extends ResultListItem {
         return (
             <div className={this.getClass(protocols)}>
                 <div className={`main-block ${data != null ? 'with-data' : 'no-data'}`} onClick={this.toggleOpenData}>
-                    <div className="count"><span>{count}</span></div>
-                    <div className="ip-port">{ip}:{port}</div>
-                    {
-                        extra ? 
+                    <div className="count">
+                        <span>{count}</span>
+                    </div>
+                    <div className="ip-port">
+                        {ip}:{port}
+                    </div>
+                    {extra ? (
                         <div className="extra">
-                        {
-                            extra.keepAlive ? <span title="Connection: Keep-Alive">K-A</span> : null
-                        }
-                        {
-                            extra.os ? <span title="OS">{extra.os}</span> : null
-                        }
-                        {
-                            extra.server ? <span title="Server">{extra.server}</span> : null
-                        }
+                            {extra.keepAlive ? <span title="Connection: Keep-Alive">K-A</span> : null}
+                            {extra.os ? <span title="OS">{extra.os}</span> : null}
+                            {extra.server ? <span title="Server">{extra.server}</span> : null}
                         </div>
-                        : <div className="extra"></div>
-                    }
+                    ) : (
+                        <div className="extra" />
+                    )}
                     <div className="protocols">
-                    {
-                        protocols.map((protocol, index) => <span key={index}>{protocol}</span>)
-                    }
+                        {protocols.map((protocol, index) => (
+                            <span key={index}>{protocol}</span>
+                        ))}
                     </div>
                     <div className="anons">
-                    {
-                        anons.map((anon, index) => <span key={index}>{anon}</span>)
-                    }
+                        {anons.map((anon, index) => (
+                            <span key={index}>{anon}</span>
+                        ))}
                     </div>
                     <div className="country">
-                        <div className={`ico ${country.flag} png`}></div>
+                        <div className={`ico ${country.flag} png`} />
                         <div className="name">{country.name}</div>
-                        <div className="city" title={country.city}>{country.city}</div>
+                        <div className="city" title={country.city}>
+                            {country.city}
+                        </div>
                     </div>
                     <div className="timeout">{timeout} ms</div>
                 </div>
-                {
-                    this.state.isDataOpened ? <ResultItemData {...data} /> : null
-                }
+                {this.state.isDataOpened ? <ResultItemData {...data} /> : null}
             </div>
         );
     }
@@ -73,29 +71,31 @@ export class ResultListItemWithoutSignatures extends ResultListItem {
         return (
             <div className={this.getClass(protocols)}>
                 <div className={`main-block ${data != null ? 'with-data' : 'no-data'}`} onClick={this.toggleOpenData}>
-                    <div className="count"><span>{count}</span></div>
+                    <div className="count">
+                        <span>{count}</span>
+                    </div>
                     <div className="ip">{ip}</div>
                     <div className="port">{port}</div>
                     <div className="protocols">
-                    {
-                        protocols.map((protocol, index) => <span key={index}>{protocol}</span>)
-                    }
+                        {protocols.map((protocol, index) => (
+                            <span key={index}>{protocol}</span>
+                        ))}
                     </div>
                     <div className="anons">
-                    {
-                        anons.map((anon, index) => <span key={index}>{anon}</span>)
-                    }
+                        {anons.map((anon, index) => (
+                            <span key={index}>{anon}</span>
+                        ))}
                     </div>
                     <div className="country">
-                        <div className={`ico ${country.flag} png`}></div>
+                        <div className={`ico ${country.flag} png`} />
                         <div className="name">{country.name}</div>
-                        <div className="city" title={country.city}>{country.city}</div>
+                        <div className="city" title={country.city}>
+                            {country.city}
+                        </div>
                     </div>
                     <div className="timeout">{timeout} ms</div>
                 </div>
-                {
-                    this.state.isDataOpened ? <ResultItemData {...data} /> : null
-                }
+                {this.state.isDataOpened ? <ResultItemData {...data} /> : null}
             </div>
         );
     }

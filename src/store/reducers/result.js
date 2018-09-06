@@ -36,7 +36,6 @@ const list = (state = initialState, action) => {
                     ...action.extra
                 }
             };
-
         case 'TOGGLE_ANON':
             return {
                 ...state,
@@ -46,7 +45,6 @@ const list = (state = initialState, action) => {
                     [action.anon]: !state.anons[action.anon]
                 }
             };
-
         case 'TOGGLE_PROTOCOL':
             return {
                 ...state,
@@ -56,14 +54,12 @@ const list = (state = initialState, action) => {
                     [action.protocol]: !state.protocols[action.protocol]
                 }
             };
-            
         case 'TOGGLE_COUNTRY':
             return {
                 ...state,
                 countOfResults: 25,
                 countries: action.countries
             };
-
         case 'TOGGLE_EXTRA':
             return {
                 ...state,
@@ -73,29 +69,24 @@ const list = (state = initialState, action) => {
                     [action.extra]: !state.extra[action.extra]
                 }
             };
-
         case 'SET_SEARCH': 
             return {
                 ...state,
                 countOfResults: 25,
                 search: action.value
             };
-
         case 'LOAD_MORE':
             return {
                 ...state,
                 countOfResults: state.countOfResults + 25
             };
-
         case 'RESULT_CLOSE':
             return initialState;
-        
         case 'TOGGLE_OPEN':
             return {
                 ...state,
                 isOpened: !state.isOpened
             };
-
         default:
             return state;
     }

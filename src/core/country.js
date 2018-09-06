@@ -276,13 +276,12 @@ export const lookup = ip => {
             } catch (error) {
                 return '';
             }
-        }
+        };
 
         return {
             city: extractCity(city),
             ...codes[country.iso_code]
         };
-
     } catch (error) {
         return {
             city: '',

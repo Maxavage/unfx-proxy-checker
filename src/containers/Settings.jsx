@@ -9,19 +9,19 @@ import '../../public/styles/Settings.postcss';
 const Settings = ({ changeSettings, IpLookup, settings }) => {
     const changeInput = e => {
         changeSettings({ [e.target.name]: e.target.value });
-    }
+    };
 
     const toggleCheckbox = e => {
         changeSettings({ [e.target.name]: e.target.checked });
-    }
+    };
 
     const toggleProtocol = e => {
         changeSettings({ protocols: { ...settings.protocols, [e.target.name]: e.target.checked } });
-    }
+    };
 
     const changeIp = e => {
         changeSettings({ ip: { ...settings.ip, [e.target.name]: e.target.value } });
-    }
+    };
 
     const { protocols, threads, timeout, retry, ip, captureFullData, captureExtraData, ...judges } = settings;
 
@@ -41,7 +41,7 @@ const Settings = ({ changeSettings, IpLookup, settings }) => {
                             <label htmlFor="http-protocol" className="cbx">
                                 <span>
                                     <svg width="12px" height="10px" viewBox="0 0 12 10">
-                                        <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                                        <polyline points="1.5 6 4.5 9 10.5 1" />
                                     </svg>
                                 </span>
                                 <span>Http</span>
@@ -50,7 +50,7 @@ const Settings = ({ changeSettings, IpLookup, settings }) => {
                             <label htmlFor="https-protocol" className="cbx">
                                 <span>
                                     <svg width="12px" height="10px" viewBox="0 0 12 10">
-                                        <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                                        <polyline points="1.5 6 4.5 9 10.5 1" />
                                     </svg>
                                 </span>
                                 <span>Https</span>
@@ -59,7 +59,7 @@ const Settings = ({ changeSettings, IpLookup, settings }) => {
                             <label htmlFor="socks4-protocol" className="cbx">
                                 <span>
                                     <svg width="12px" height="10px" viewBox="0 0 12 10">
-                                        <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                                        <polyline points="1.5 6 4.5 9 10.5 1" />
                                     </svg>
                                 </span>
                                 <span>Socks4</span>
@@ -68,7 +68,7 @@ const Settings = ({ changeSettings, IpLookup, settings }) => {
                             <label htmlFor="socks5-protocol" className="cbx">
                                 <span>
                                     <svg width="12px" height="10px" viewBox="0 0 12 10">
-                                        <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                                        <polyline points="1.5 6 4.5 9 10.5 1" />
                                     </svg>
                                 </span>
                                 <span>Socks5</span>
@@ -82,7 +82,7 @@ const Settings = ({ changeSettings, IpLookup, settings }) => {
                             <label htmlFor="captureFullData" className="cbx">
                                 <span>
                                     <svg width="12px" height="10px" viewBox="0 0 12 10">
-                                        <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                                        <polyline points="1.5 6 4.5 9 10.5 1" />
                                     </svg>
                                 </span>
                                 <span>Capture full data</span>
@@ -91,7 +91,7 @@ const Settings = ({ changeSettings, IpLookup, settings }) => {
                             <label htmlFor="captureExtraData" className="cbx">
                                 <span>
                                     <svg width="12px" height="10px" viewBox="0 0 12 10">
-                                        <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                                        <polyline points="1.5 6 4.5 9 10.5 1" />
                                     </svg>
                                 </span>
                                 <span>Capture extra data</span>
@@ -117,7 +117,7 @@ const Settings = ({ changeSettings, IpLookup, settings }) => {
                             <label htmlFor="retry" className="cbx">
                                 <span>
                                     <svg width="12px" height="10px" viewBox="0 0 12 10">
-                                        <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                                        <polyline points="1.5 6 4.5 9 10.5 1" />
                                     </svg>
                                 </span>
                                 <span>Retry</span>
@@ -162,14 +162,16 @@ const Settings = ({ changeSettings, IpLookup, settings }) => {
                         <h1 className="title">Your ip is:</h1>
                         <div className="content">
                             <input type="text" name="current" className="field" onChange={changeIp} value={ip.current} />
-                            <button className="ip-lookup-button" onClick={IpLookup}>Check</button>  
+                            <button className="ip-lookup-button" onClick={IpLookup}>
+                                Check
+                            </button>
                         </div>
                     </div>
                 </TabPanel>
             </Tabs>
         </div>
     );
-}
+};
 
 const mapStateToProps = state => ({
     settings: state.settings

@@ -45,7 +45,7 @@ const parseInputProxies = list => {
 export const start = () => async (dispatch, getState) => {
     try {
         const { settings, input } = getState();
-        
+
         const options = validateOptions({
             threads: settings.threads,
             timeout: settings.timeout,
@@ -53,7 +53,7 @@ export const start = () => async (dispatch, getState) => {
             captureExtraData: settings.captureExtraData,
             captureFullData: settings.captureFullData
         });
-        
+
         const judges = validateJudges({
             usual: {
                 url: settings.usualJudge,
@@ -64,13 +64,13 @@ export const start = () => async (dispatch, getState) => {
                 validateString: settings.sslJudgeValidateString
             }
         });
-        
+
         const protocols = validateProtocols(settings.protocols);
 
         const chainCheck = ip => {
             core.start(parseInputProxies(input), options, judges, protocols, ip);
         };
-        
+
         if (isIP(settings.ip.current)) {
             chainCheck(settings.ip.current);
         } else {
@@ -83,7 +83,6 @@ export const start = () => async (dispatch, getState) => {
                 lookupUrl: settings.ip.lookupUrl
             }
         });
-
     } catch (error) {
         alert(error);
     }

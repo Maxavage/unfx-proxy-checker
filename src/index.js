@@ -7,15 +7,15 @@ let window;
 
 const devWindow = () => {
     installExtension(REACT_DEVELOPER_TOOLS)
-    .then(name => console.log('Added:', name))
-    .catch(err => console.log('Error:', err));
+        .then(name => console.log('Added:', name))
+        .catch(err => console.log('Error:', err));
 
     window = new BrowserWindow({
         width: 1850,
         height: 960,
         show: false
     });
-    
+
     window.webContents.openDevTools();
 };
 
@@ -26,9 +26,9 @@ const prodWindow = () => {
         width: 1220,
         height: 745,
         show: false,
-        resizable: true,
+        resizable: true
     });
-    
+
     window.setMenu(null);
 };
 
@@ -37,12 +37,12 @@ const createWindow = () => {
 
     window.loadURL(
         process.env.NODE_ENV !== 'production'
-        ? 'http://localhost:8080'
-        : url.format({
-            pathname: path.join(__dirname, 'index.html'),
-            protocol: 'file:',
-            slashes: true
-        })
+            ? 'http://localhost:8080'
+            : url.format({
+                  pathname: path.join(__dirname, 'index.html'),
+                  protocol: 'file:',
+                  slashes: true
+              })
     );
 
     window.on('ready-to-show', () => {

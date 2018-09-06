@@ -280,7 +280,7 @@ export default class Checker {
                 });
             }
         }
-        
+
         delete this.tempStates;
         return result;
     }

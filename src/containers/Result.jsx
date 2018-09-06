@@ -181,7 +181,4 @@ const mapDispatchToProps = {
     loadMore
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Result);
+export default connect(mapStateToProps, mapDispatchToProps)(Result);

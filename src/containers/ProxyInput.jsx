@@ -7,7 +7,11 @@ import '../../public/styles/ProxyInput.postcss';
 class ProxyInput extends React.Component {
     shouldComponentUpdate = nextProps => this.props.input != nextProps.input;
 
-    lines = content => content.split(/\r\n|\r|\n/).length.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    lines = content =>
+        content
+            .split(/\r\n|\r|\n/)
+            .length.toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 
     listSize = str => {
         let size = str.length;
@@ -26,19 +30,17 @@ class ProxyInput extends React.Component {
         } else {
             return `${result.toFixed(2)} KB`;
         }
-    }
+    };
 
     onInputEvent = e => {
         const { changeValue } = this.props;
         changeValue(e.target.value);
-    }
+    };
 
     render = ({ input, loadFromTxt } = this.props) => (
         <div className="proxy-input">
             <span>
-                <button onClick={loadFromTxt}>
-                    Load from txt
-                </button>
+                <button onClick={loadFromTxt}>Load from txt</button>
             </span>
             <div className="metrics">
                 <div className="lines">Lines: {this.lines(input)}</div>

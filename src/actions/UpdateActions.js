@@ -13,16 +13,20 @@ export const checkAtAvailable = () => async dispatch => {
     await wait(500);
 
     if (details) {
-        dispatch(changeUpdateState({
-            isAvailable: true,
-            isChecking: false,
-            info: details
-        }));
+        dispatch(
+            changeUpdateState({
+                isAvailable: true,
+                isChecking: false,
+                info: details
+            })
+        );
     } else {
-        dispatch(changeUpdateState({
-            isOpened: false,
-            isChecking: false
-        }));
+        dispatch(
+            changeUpdateState({
+                isOpened: false,
+                isChecking: false
+            })
+        );
     }
 };
 
@@ -62,14 +66,14 @@ export const download = arch => async (dispatch, getState) => {
     progress(request(download.fullUrl), {
         throttle: 100
     })
-    .on('progress', state => {
-        dispatch(upDownloadProgress(state.percent * 100));
-    })
-    .on('end', () => {
-        setTimeout(() => {
-            shell.showItemInFolder(savePath);
-            getCurrentWindow().close();
-        }, 300);
-    })
-    .pipe(createWriteStream(savePath));
+        .on('progress', state => {
+            dispatch(upDownloadProgress(state.percent * 100));
+        })
+        .on('end', () => {
+            setTimeout(() => {
+                shell.showItemInFolder(savePath);
+                getCurrentWindow().close();
+            }, 300);
+        })
+        .pipe(createWriteStream(savePath));
 };

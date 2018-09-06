@@ -18,41 +18,45 @@ export const IpLookup = chainEvent => async (dispatch, getState) => {
         return;
     }
 
-    dispatch(changeIpLookupStatus({isActive: true, locked: true}));
+    dispatch(changeIpLookupStatus({ isActive: true, locked: true }));
 
     const onError = async () => {
         await wait(500);
-        dispatch(changeIpLookupStatus({
-            isLookupDone: true,
-            isLookupSuccess: false
-        }));
+        dispatch(
+            changeIpLookupStatus({
+                isLookupDone: true,
+                isLookupSuccess: false
+            })
+        );
 
         await wait(3000);
-        dispatch(changeIpLookupStatus({isActive: false}));
+        dispatch(changeIpLookupStatus({ isActive: false }));
         await wait(500);
         dispatch(toInitialState);
-    }
-    
+    };
+
     try {
         const response = await getIP(settings.ip.lookupUrl);
-        
+
         if (isIP(response)) {
             await wait(500);
-            dispatch(changeIpLookupStatus({
-                currentIP: response,
-                isLookupDone: true,
-                isLookupSuccess: true
-            }));
-            
+            dispatch(
+                changeIpLookupStatus({
+                    currentIP: response,
+                    isLookupDone: true,
+                    isLookupSuccess: true
+                })
+            );
+
             dispatch(changeSettings({ ip: { ...settings.ip, current: response } }));
-    
+
             await wait(1000);
-            dispatch(changeIpLookupStatus({isActive: false}));
-    
+            dispatch(changeIpLookupStatus({ isActive: false }));
+
             if (chainEvent) {
                 chainEvent(response);
             }
-    
+
             await wait(500);
             dispatch(toInitialState);
         } else {
