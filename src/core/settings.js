@@ -2,7 +2,7 @@ import { writeFile, readFileSync, existsSync } from 'fs';
 import { SETTINGS_FILE_NAME, DEFAULT_SETTINGS } from '../constants/SettingsConstants';
 
 export const saveSettings = setting => {
-    writeFile(SETTINGS_FILE_NAME, JSON.stringify(setting), () => {});
+    writeFile(SETTINGS_FILE_NAME, JSON.stringify(setting, null, 4), () => null);
 };
 
 export const getSettings = () => {

@@ -1,6 +1,6 @@
 import { LOOKUP_URL } from './IpLookupConfigConstants';
 
-export const SETTINGS_FILE_NAME = 'settings.unfx';
+export const SETTINGS_FILE_NAME = 'settings.unfx.json';
 
 export const DEFAULT_SETTINGS = {
     threads: 350,
