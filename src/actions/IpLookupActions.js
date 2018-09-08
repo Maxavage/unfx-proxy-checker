@@ -2,18 +2,20 @@ import { getIP } from '../core/ip';
 import { changeSettings } from './SettingsActions';
 import { wait } from '../misc/wait';
 import { isIP } from '../misc/regexes';
+import { CHANGE_IP_LOOKUP_STATUS, CHANGE_IP_LOOKUP_TO_INITIAL } from '../constants/ActionTypes';
 
 export const changeIpLookupStatus = status => ({
-    type: 'CHANGE_IP_LOOKUP_STATUS',
+    type: CHANGE_IP_LOOKUP_STATUS,
     status
 });
 
-export const toInitialState = {
-    type: 'CHANGE_IP_LOOKUP_TO_INITIAL'
-};
+export const toInitialState = () => ({
+    type: CHANGE_IP_LOOKUP_TO_INITIAL
+});
 
 export const IpLookup = chainEvent => async (dispatch, getState) => {
     const { settings, ip } = getState();
+    
     if (ip.locked) {
         return;
     }
@@ -32,7 +34,7 @@ export const IpLookup = chainEvent => async (dispatch, getState) => {
         await wait(3000);
         dispatch(changeIpLookupStatus({ isActive: false }));
         await wait(500);
-        dispatch(toInitialState);
+        dispatch(toInitialState());
     };
 
     try {
@@ -58,7 +60,7 @@ export const IpLookup = chainEvent => async (dispatch, getState) => {
             }
 
             await wait(500);
-            dispatch(toInitialState);
+            dispatch(toInitialState());
         } else {
             onError();
         }

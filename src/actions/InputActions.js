@@ -1,9 +1,11 @@
 import { readFile } from 'fs';
 import { remote } from 'electron';
+import { CHANGE_INPUT } from '../constants/ActionTypes';
+
 const { dialog } = remote;
 
 export const changeValue = value => ({
-    type: 'CHANGE_INPUT',
+    type: CHANGE_INPUT,
     value
 });
 
@@ -17,11 +19,8 @@ export const loadFromTxt = () => dispatch => {
         ]
     });
 
-    if (!readPath) {
-        return;
+    if (readPath) {
+        dispatch(changeValue('Loading...'));
+        readFile(readPath[0], 'utf8', (err, contents) => dispatch(changeValue(contents)));
     }
-
-    dispatch(changeValue('Loading...'));
-
-    readFile(readPath[0], 'utf8', (err, contents) => dispatch(changeValue(contents)));
 };

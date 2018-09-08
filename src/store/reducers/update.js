@@ -1,3 +1,5 @@
+import { CHANGE_UPDATE_STATE, UPDATE_UP_DOWNLOAD_PROGRESS, UPDATE_CLOSE } from '../../constants/ActionTypes';
+
 const initialState = {
     isOpened: true,
     isAvailable: false,
@@ -9,17 +11,17 @@ const initialState = {
 
 const update = (state = initialState, action) => {
     switch (action.type) {
-        case 'CHANGE_UPDATE_STATE':
+        case CHANGE_UPDATE_STATE:
             return {
                 ...state,
                 ...action.nextState
             };
-        case 'UPDATE_UP_DOWNLOAD_PROGRESS':
+        case UPDATE_UP_DOWNLOAD_PROGRESS:
             return {
                 ...state,
                 downloadProgress: action.percent
             };
-        case 'UPDATE_CLOSE':
+        case UPDATE_CLOSE:
             return {
                 ...state,
                 isOpened: false

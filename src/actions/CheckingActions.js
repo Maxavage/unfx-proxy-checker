@@ -4,6 +4,7 @@ import { uniq } from '../misc/uniq';
 import { findProxies, isURL, isIP } from '../misc/regexes';
 import { saveSettings } from '../core/settings';
 import { IpLookup } from './IpLookupActions';
+import { UP_COUNTER_STATUS, TOGGLE_CHECKING_OPEN } from '../constants/ActionTypes';
 
 const validateOptions = options => {
     options.threads = parseInt(options.threads);
@@ -93,10 +94,10 @@ export const stop = () => () => {
 };
 
 export const toggleOpen = () => ({
-    type: 'TOGGLE_CHECKING_OPEN'
+    type: TOGGLE_CHECKING_OPEN
 });
 
 export const upCounterStatus = counter => ({
-    type: 'UP_COUNTER_STATUS',
+    type: UP_COUNTER_STATUS,
     counter
 });

@@ -1,3 +1,5 @@
+import { CHANGE_IP_LOOKUP_STATUS, CHANGE_IP_LOOKUP_TO_INITIAL } from '../../constants/ActionTypes';
+
 const initialState = {
     isActive: false,
     currentIP: '',
@@ -8,12 +10,12 @@ const initialState = {
 
 const ip = (state = initialState, action) => {
     switch (action.type) {
-        case 'CHANGE_IP_LOOKUP_STATUS':
+        case CHANGE_IP_LOOKUP_STATUS:
             return {
                 ...state,
                 ...action.status
             };
-        case 'CHANGE_IP_LOOKUP_TO_INITIAL':
+        case CHANGE_IP_LOOKUP_TO_INITIAL:
             return initialState;
         default:
             return state;

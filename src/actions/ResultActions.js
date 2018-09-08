@@ -1,6 +1,18 @@
 import { getFilteredProxies } from '../store/selectors/getFilteredProxies';
 import { writeFile } from 'fs';
 import { remote } from 'electron';
+import {
+    ADD_RESULT,
+    TOGGLE_ANON,
+    TOGGLE_PROTOCOL,
+    TOGGLE_COUNTRY,
+    TOGGLE_EXTRA,
+    SET_SEARCH,
+    LOAD_MORE,
+    RESULT_CLOSE,
+    TOGGLE_OPEN
+} from '../constants/ActionTypes';
+
 const { dialog } = remote;
 
 export const save = () => (dispatch, getState) => {
@@ -13,19 +25,17 @@ export const save = () => (dispatch, getState) => {
         ]
     });
 
-    if (!savePath) {
-        return;
+    if (savePath) {
+        writeFile(savePath, getFilteredProxies(getState()).map(item => `${item.ip}:${item.port}`).join('\r\n'), err => {});
     }
-
-    writeFile(savePath, getFilteredProxies(getState()).map(item => `${item.ip}:${item.port}`).join('\r\n'), err => {});
 };
 
 export const toggleOpen = () => ({
-    type: 'TOGGLE_OPEN'
+    type: TOGGLE_OPEN
 });
 
 export const close = () => ({
-    type: 'RESULT_CLOSE'
+    type: RESULT_CLOSE
 });
 
 const createCountries = items => {
@@ -46,29 +56,29 @@ const createCountries = items => {
 };
 
 export const addResult = (items, extra) => ({
-    type: 'ADD_RESULT',
+    type: ADD_RESULT,
     items,
     countries: createCountries(items),
     extra
 });
 
 export const toggleAnon = e => ({
-    type: 'TOGGLE_ANON',
+    type: TOGGLE_ANON,
     anon: e.target.name
 });
 
 export const toggleProtocol = e => ({
-    type: 'TOGGLE_PROTOCOL',
+    type: TOGGLE_PROTOCOL,
     protocol: e.target.name
 });
 
 export const toggleExtra = e => ({
-    type: 'TOGGLE_EXTRA',
+    type: TOGGLE_EXTRA,
     extra: e.target.name
 });
 
 export const onSearchInput = e => ({
-    type: 'SET_SEARCH',
+    type: SET_SEARCH,
     value: e.target.value
 });
 
@@ -85,11 +95,11 @@ export const toggleCountry = (country, all) => (dispatch, getState) => {
     }
 
     dispatch({
-        type: 'TOGGLE_COUNTRY',
+        type: TOGGLE_COUNTRY,
         countries 
     });
 };
 
 export const loadMore = () => ({
-    type: 'LOAD_MORE'
+    type: LOAD_MORE
 });

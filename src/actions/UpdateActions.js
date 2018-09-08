@@ -4,6 +4,7 @@ import { remote, shell } from 'electron';
 import { getLatestVersionInfo } from '../core/updater';
 import { createWriteStream } from 'fs';
 import { wait } from '../misc/wait';
+import { CHANGE_UPDATE_STATE, UPDATE_UP_DOWNLOAD_PROGRESS, UPDATE_CLOSE } from '../constants/ActionTypes';
 
 const { dialog, getCurrentWindow } = remote;
 
@@ -31,16 +32,16 @@ export const checkAtAvailable = () => async dispatch => {
 };
 
 const changeUpdateState = nextState => ({
-    type: 'CHANGE_UPDATE_STATE',
+    type: CHANGE_UPDATE_STATE,
     nextState
 });
 
 export const close = () => ({
-    type: 'UPDATE_CLOSE'
+    type: UPDATE_CLOSE
 });
 
 const upDownloadProgress = percent => ({
-    type: 'UPDATE_UP_DOWNLOAD_PROGRESS',
+    type: UPDATE_UP_DOWNLOAD_PROGRESS,
     percent
 });
 
@@ -57,15 +58,12 @@ export const download = arch => async (dispatch, getState) => {
         ]
     });
 
-    if (!savePath) {
-        return;
-    }
-
-    dispatch(changeUpdateState({ onDownloading: true }));
-
-    progress(request(download.fullUrl), {
-        throttle: 100
-    })
+    if (savePath) {
+        dispatch(changeUpdateState({ onDownloading: true }));
+    
+        progress(request(download.fullUrl), {
+            throttle: 100
+        })
         .on('progress', state => {
             dispatch(upDownloadProgress(state.percent * 100));
         })
@@ -76,4 +74,5 @@ export const download = arch => async (dispatch, getState) => {
             }, 300);
         })
         .pipe(createWriteStream(savePath));
+    }
 };
