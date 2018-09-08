@@ -7,7 +7,11 @@ export const saveSettings = setting => {
 
 export const getSettings = () => {
     if (existsSync(SETTINGS_FILE_NAME)) {
-        return JSON.parse(readFileSync(SETTINGS_FILE_NAME, 'utf8'));
+        try {
+            return JSON.parse(readFileSync(SETTINGS_FILE_NAME, 'utf8'));
+        } catch (error) {
+            return DEFAULT_SETTINGS;
+        }
     }
 
     return DEFAULT_SETTINGS;
