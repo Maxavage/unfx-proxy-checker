@@ -5,3 +5,4 @@ settings.unfx.json
 /.vscode
 dist
 package-lock.json
+tests
