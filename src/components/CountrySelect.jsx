@@ -4,9 +4,9 @@ const CountrySelect = ({ items, toggle }) => (
     <div className="country-select">
         {Object.keys(items)
             .sort((a, b) => items[b].count - items[a].count)
-            .map((item, index) => (
+            .map(item => (
                 <div
-                    key={index}
+                    key={item}
                     className={items[item].state ? 'country-item enable' : 'country-item'} 
                     onClick={() => toggle(item)} 
                     name={item} 

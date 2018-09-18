@@ -3,21 +3,15 @@ import Checker from './checker';
 
 EventEmitter.defaultMaxListeners = 0;
 
-class Core {
-    constructor() {
-        this.checker;
-    }
+export default class Core {
+    static checker;
 
-    stop() {
+    static stop() {
         this.checker.stop();
     }
-
-    start(proxies, options, judges, checkProtocols, ip) {
+    
+    static start(proxies, options, judges, checkProtocols, ip) {
         this.checker = new Checker(proxies, options, ip, judges, checkProtocols);
         this.checker.start();
     }
 }
-
-const core = new Core();
-
-export default core;

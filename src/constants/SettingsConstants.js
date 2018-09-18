@@ -8,10 +8,73 @@ export const DEFAULT_SETTINGS = {
     retry: false,
     captureFullData: false,
     captureExtraData: false,
-    usualJudge: 'http://pascal.hoez.free.fr/azenv.php',
-    usualJudgeValidateString: 'pascal.hoez.free.fr',
-    sslJudge: 'https://yandex.ru/company',
-    sslJudgeValidateString: 'yandex',
+    swapJudges: true,
+    judgesList: [
+        {
+            url: 'http://proxyjudge.info/',
+            ssl: false,
+            validate: {
+                enabled: false,
+                value: 'proxyjudge.info'
+            }
+        },
+        {
+            url: 'https://www.google.ru/',
+            ssl: true,
+            validate: {
+                enabled: false,
+                value: 'proxyjudge.info'
+            }
+        },
+        {
+            url: 'https://api.openproxy.space/judge',
+            ssl: true,
+            validate: {
+                enabled: false,
+                value: 'proxyjudge.info'
+            }
+        },
+        {
+            url: 'http://www.sbjudge3.com/azenv.php',
+            ssl: false,
+            validate: {
+                enabled: false,
+                value: 'sbjudge3.com'
+            }
+        },
+        {
+            url: 'http://proxyjudge.us/azenv.php',
+            ssl: false,
+            validate: {
+                enabled: false,
+                value: 'proxyjudge.us'
+            }
+        },
+        {
+            url: 'http://azenv.net/',
+            ssl: false,
+            validate: {
+                enabled: false,
+                value: 'azenv.net'
+            }
+        },
+        {
+            url: 'http://www.cooleasy.com/azenv.php',
+            ssl: false,
+            validate: {
+                enabled: false,
+                value: 'cooleasy.com'
+            }
+        },
+        {
+            url: 'http://www.proxy-listen.de/azenv.php',
+            ssl: false,
+            validate: {
+                enabled: false,
+                value: 'proxy-listen.de'
+            }
+        }
+    ],
     protocols: {
         http: true,
         https: true,

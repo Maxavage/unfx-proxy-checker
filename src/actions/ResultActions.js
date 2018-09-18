@@ -26,7 +26,7 @@ export const save = () => (dispatch, getState) => {
     });
 
     if (savePath) {
-        writeFile(savePath, getFilteredProxies(getState()).map(item => `${item.ip}:${item.port}`).join('\r\n'), err => {});
+        writeFile(savePath, getFilteredProxies(getState()).map(item => `${item.ip}:${item.port}`).join('\r\n'), () => null);
     }
 };
 
