@@ -1,4 +1,5 @@
-import core from '../core';
+import Core from '../core';
+import Judges from '../core/judges';
 import check from 'check-types';
 import { uniq } from '../misc/uniq';
 import { findProxies, isURL, isIP } from '../misc/regexes';
@@ -17,12 +18,20 @@ const validateOptions = options => {
     throw new Error('Min threads 1, Max 500. Min timeout 1000, Max 60000');
 };
 
-const validateJudges = judges => {
-    if (isURL(judges.usual.url) && isURL(judges.ssl.url)) {
+const validateJudges = (judges, targetProtocols) => {
+    if (targetProtocols.includes('https') && !judges.some(item => item.ssl)) {
+        throw new Error('You have no judges for HTTPS');
+    }
+
+    if (targetProtocols.some(protocol => ['http', 'socks4', 'socks5'].includes(protocol)) && !judges.some(item => !item.ssl)) {
+        throw new Error('You have no judges for HTTP/SOCKS4/SOCKS5');
+    }
+
+    if (judges.every(item => isURL(item.url))) {
         return judges;
     }
 
-    throw new Error('Judge must be is a URL');
+    throw new Error('Judge URL is not correct');
 };
 
 const validateProtocols = protocols => {
@@ -45,31 +54,27 @@ const parseInputProxies = list => {
 
 export const start = () => async (dispatch, getState) => {
     try {
-        const { settings, input } = getState();
+        const { settings, input, judges, ip } = getState();
+
+        if (judges.locked || ip.locked) {
+            return;
+        }
 
         const options = validateOptions({
             threads: settings.threads,
             timeout: settings.timeout,
             retry: settings.retry,
             captureExtraData: settings.captureExtraData,
-            captureFullData: settings.captureFullData
-        });
-
-        const judges = validateJudges({
-            usual: {
-                url: settings.usualJudge,
-                validateString: settings.usualJudgeValidateString
-            },
-            ssl: {
-                url: settings.sslJudge,
-                validateString: settings.sslJudgeValidateString
-            }
+            captureFullData: settings.captureFullData,
+            swapJudges: settings.swapJudges
         });
 
         const protocols = validateProtocols(settings.protocols);
+        const judgesList = validateJudges(settings.judgesList, protocols);
+        const initJudges = await new Judges({ swap: options.swapJudges, items: judgesList }, protocols);
 
         const chainCheck = ip => {
-            core.start(parseInputProxies(input), options, judges, protocols, ip);
+            Core.start(parseInputProxies(input), options, initJudges, protocols, ip);
         };
 
         if (isIP(settings.ip.current)) {
@@ -90,7 +95,7 @@ export const start = () => async (dispatch, getState) => {
 };
 
 export const stop = () => () => {
-    core.stop();
+    Core.stop();
 };
 
 export const toggleOpen = () => ({

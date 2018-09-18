@@ -1,12 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import { changeSettings } from '../actions/SettingsActions';
+import { changeSettings, changeSettingsJudge, addSettingsJudge, removeSettingsJudge } from '../actions/SettingsActions';
 import { IpLookup } from '../actions/IpLookupActions';
+import SettingsJudgeItem from '../components/SettingsJudgeItem';
+import SettingsAddJudge from '../components/SettingsAddJudge';
 
 import '../../public/styles/Settings.postcss';
 
-const Settings = ({ changeSettings, IpLookup, settings }) => {
+const Settings = ({ changeSettings, changeSettingsJudge, addSettingsJudge, removeSettingsJudge, IpLookup, settings }) => {
     const changeInput = e => {
         changeSettings({ [e.target.name]: e.target.value });
     };
@@ -23,7 +25,7 @@ const Settings = ({ changeSettings, IpLookup, settings }) => {
         changeSettings({ ip: { ...settings.ip, [e.target.name]: e.target.value } });
     };
 
-    const { protocols, threads, timeout, retry, ip, captureFullData, captureExtraData, ...judges } = settings;
+    const { protocols, threads, timeout, retry, ip, captureFullData, captureExtraData, swapJudges, judgesList } = settings;
 
     return (
         <div className="settings no-select">
@@ -126,29 +128,33 @@ const Settings = ({ changeSettings, IpLookup, settings }) => {
                     </div>
                 </TabPanel>
                 <TabPanel>
-                    <div className="block small">
-                        <h1 className="title">Judge:</h1>
-                        <div className="content">
-                            <input type="text" name="usualJudge" className="field" onChange={changeInput} value={judges.usualJudge} />
+                    <div className="block middle">
+                        <h1 className="title">Currently active:</h1>
+                        <div className="content no-flex">
+                            <div className="judges-list">
+                                <div className="items">
+                                    {judgesList.map(item => (
+                                        <SettingsJudgeItem {...item} key={item.url} changeSettingsJudge={changeSettingsJudge} removeSettingsJudge={removeSettingsJudge} />
+                                    ))}
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div className="block small">
-                        <h1 className="title">Validate string:</h1>
-                        <div className="content">
-                            <input type="text" name="usualJudgeValidateString" className="field" onChange={changeInput} value={judges.usualJudgeValidateString} />
+                    <div className="block middle">
+                        <h1 className="title">Extra:</h1>
+                        <div className="content no-flex">
+                            <input type="checkbox" id="swap-judges" className="inp-cbx" name="swapJudges" checked={swapJudges} onChange={toggleCheckbox} />
+                            <label htmlFor="swap-judges" className="cbx">
+                                <span>
+                                    <svg width="12px" height="10px" viewBox="0 0 12 10">
+                                        <polyline points="1.5 6 4.5 9 10.5 1" />
+                                    </svg>
+                                </span>
+                                <span>Swap</span>
+                            </label>
                         </div>
-                    </div>
-                    <div className="block small">
-                        <h1 className="title">Ssl judge:</h1>
-                        <div className="content">
-                            <input type="text" name="sslJudge" className="field" onChange={changeInput} value={judges.sslJudge} />
-                        </div>
-                    </div>
-                    <div className="block small">
-                        <h1 className="title">Validate string:</h1>
-                        <div className="content">
-                            <input type="text" name="sslJudgeValidateString" className="field" onChange={changeInput} value={judges.sslJudgeValidateString} />
-                        </div>
+                        <h1 className="title">Add new Judge:</h1>
+                        <SettingsAddJudge addSettingsJudge={addSettingsJudge} />
                     </div>
                 </TabPanel>
                 <TabPanel>
@@ -179,7 +185,13 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
     changeSettings,
+    changeSettingsJudge,
+    addSettingsJudge,
+    removeSettingsJudge,
     IpLookup
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Settings);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Settings);

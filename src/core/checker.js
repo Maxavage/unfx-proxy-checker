@@ -5,6 +5,7 @@ import { uniq } from '../misc/uniq';
 import { lookup } from './country';
 import { toggleOpen as toggleChecking, upCounterStatus } from '../actions/CheckingActions';
 import { toggleOpen as toggleResult, addResult } from '../actions/ResultActions';
+import Judges from './judges';
 
 export default class Checker {
     constructor(proxies, options, ip, judges, checkProtocols) {
@@ -21,6 +22,7 @@ export default class Checker {
         this.captureFullData = options.captureFullData;
         this.captureExtraData = options.captureExtraData;
         this.judges = judges;
+
         this.pool = {
             running: 0,
             limit: options.threads,
@@ -31,8 +33,7 @@ export default class Checker {
         this.initialRequestConfig = {
             time: true,
             timeout: this.timeout,
-            resolveWithFullResponse: true,
-            url: this.judges.usual.url
+            resolveWithFullResponse: true
         };
 
         this.retry = options.retry;
@@ -40,34 +41,34 @@ export default class Checker {
         this.checkAt = {
             http: async (proxy, retry) => {
                 try {
-                    const response = await rp.get(this.getRequestConfig({ agent: this.getAgentConfig('http://', proxy) }));
-                    this.onResponse(response, proxy, 'http', 'usual');
+                    const response = await rp.get({ ...this.initialRequestConfig, url: this.judges.getUsual(), agent: this.getAgentConfig('http://', proxy) });
+                    this.onResponse(response, proxy, 'http');
                 } catch (error) {
-                    this.onError(error, proxy, 'http', retry);
+                    this.onError(proxy, 'http', retry);
                 }
             },
             https: async (proxy, retry) => {
                 try {
-                    const response = await rp.get(this.getRequestConfig({ url: this.judges.ssl.url, agent: this.getAgentConfig('http://', proxy) }));
-                    this.onResponse(response, proxy, 'https', 'ssl');
+                    const response = await rp.get({ ...this.initialRequestConfig, url: this.judges.getSSL(), agent: this.getAgentConfig('http://', proxy) });
+                    this.onResponse(response, proxy, 'https');
                 } catch (error) {
-                    this.onError(error, proxy, 'https', retry);
+                    this.onError(proxy, 'https', retry);
                 }
             },
             socks4: async (proxy, retry) => {
                 try {
-                    const response = await rp.get(this.getRequestConfig({ agent: this.getAgentConfig('socks4://', proxy) }));
-                    this.onResponse(response, proxy, 'socks4', 'usual');
+                    const response = await rp.get({ ...this.initialRequestConfig, url: this.judges.getUsual(), agent: this.getAgentConfig('socks4://', proxy) });
+                    this.onResponse(response, proxy, 'socks4');
                 } catch (error) {
-                    this.onError(error, proxy, 'socks4', retry);
+                    this.onError(proxy, 'socks4', retry);
                 }
             },
             socks5: async (proxy, retry) => {
                 try {
-                    const response = await rp.get(this.getRequestConfig({ agent: this.getAgentConfig('socks5://', proxy) }));
-                    this.onResponse(response, proxy, 'socks5', 'usual');
+                    const response = await rp.get({ ...this.initialRequestConfig, url: this.judges.getUsual(), agent: this.getAgentConfig('socks5://', proxy) });
+                    this.onResponse(response, proxy, 'socks5');
                 } catch (error) {
-                    this.onError(error, proxy, 'socks5', retry);
+                    this.onError(proxy, 'socks5', retry);
                 }
             }
         };
@@ -87,7 +88,6 @@ export default class Checker {
         };
 
         this.checkProtocols.forEach(protocol => (counter.protocols[protocol] = 0));
-
         return counter;
     }
 
@@ -153,16 +153,12 @@ export default class Checker {
         this.run();
     }
 
-    validateResponse(body, judge) {
-        return body.match(new RegExp(this.judges[judge].validateString), 'g');
-    }
-
-    onResponse(response, proxy, protocol, judge) {
+    onResponse(response, proxy, protocol) {
         if (this.stopped) {
             return;
         }
 
-        if (this.validateResponse(response.body, judge)) {
+        if (this.judges.validate(response.body, response.request.href)) {
             const anon = this.getAnon(response.body);
 
             if (this.captureExtraData) {
@@ -199,7 +195,7 @@ export default class Checker {
         this.isDone(proxy);
     }
 
-    onError(error, proxy, protocol, retry) {
+    onError(proxy, protocol, retry) {
         if (this.stopped) {
             return;
         }
@@ -215,15 +211,7 @@ export default class Checker {
     getAgentConfig(scheme, proxy) {
         let agent = new ProxyAgent(scheme + proxy);
         agent.timeout = this.timeout;
-
         return agent;
-    }
-
-    getRequestConfig(mergeConfig) {
-        return {
-            ...this.initialRequestConfig,
-            ...mergeConfig
-        };
     }
 
     buildCheck(protocols) {
@@ -253,15 +241,7 @@ export default class Checker {
 
     getResult() {
         const result = [];
-
-        const calcTimeout = timeouts => {
-            if (timeouts.length > 1) {
-                return timeouts.reduce((a, b) => a + b) / timeouts.length;
-            }
-
-            return timeouts[0];
-        };
-
+        const calcTimeout = timeouts => (timeouts.length > 1 ? timeouts.reduce((a, b) => a + b) / timeouts.length : timeouts[0]);
         const getAnon = anons => (anons.length > 1 ? uniq(anons) : anons);
 
         for (let proxy in this.tempStates) {
@@ -323,7 +303,6 @@ export default class Checker {
     start() {
         store.dispatch(upCounterStatus(this.counter));
         store.dispatch(toggleChecking());
-
         const startPoolThreadsCount = this.pool.queue.length > this.pool.limit ? this.pool.limit : this.pool.queue.length;
 
         setTimeout(() => {

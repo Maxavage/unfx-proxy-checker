@@ -5,6 +5,7 @@ import input from './input';
 import update from './update';
 import result from './result';
 import ip from './ip';
+import judges from './judges';
 
 const mainReducer = combineReducers({
     settings,
@@ -12,7 +13,8 @@ const mainReducer = combineReducers({
     input,
     result,
     ip,
-    update
+    update,
+    judges
 });
 
 export default mainReducer;

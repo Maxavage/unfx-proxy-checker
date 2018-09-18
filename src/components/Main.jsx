@@ -2,6 +2,7 @@ import React from 'react';
 import Settings from '../containers/Settings';
 import ProxyInput from '../containers/ProxyInput';
 import Checking from '../containers/Checking';
+import Judges from '../containers/Judges';
 import Update from './Update';
 import Footer from './Footer';
 import Result from '../containers/Result';
@@ -25,6 +26,7 @@ const Main = ({ start }) => (
         <Checking />
         <Result />
         <Ip />
+        <Judges />
     </div>
 );
 
