@@ -101,7 +101,14 @@ export default class Judges {
             response
         };
 
-        store.dispatch(changeJudgePingState(judge.url, { state: { checking: false, working: true } }));
+        store.dispatch(changeJudgePingState(judge.url, {
+            state: {
+                checking: false,
+                working: true,
+                timeout: response.elapsedTime
+            }
+        }));
+        
         this.isDone();
     }
 

@@ -46,7 +46,7 @@ class ProxyInput extends React.Component {
                 <div className="lines">Lines: {this.lines(input)}</div>
                 <div className="size">Size: {this.listSize(input)}</div>
             </div>
-            <textarea name="input" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck="false" cols="30" rows="10" onInput={this.onInputEvent} value={input} />
+            <textarea name="input" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck="false" cols="30" rows="10" onChange={this.onInputEvent} value={input} />
         </div>
     );
 }
