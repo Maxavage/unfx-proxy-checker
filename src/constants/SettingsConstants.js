@@ -14,31 +14,23 @@ export const DEFAULT_SETTINGS = {
             url: 'http://proxyjudge.info/',
             ssl: false,
             validate: {
-                enabled: false,
+                enabled: true,
                 value: 'proxyjudge.info'
             }
         },
         {
-            url: 'https://www.google.ru/',
+            url: 'https://yandex.ru/company',
             ssl: true,
             validate: {
-                enabled: false,
-                value: 'proxyjudge.info'
-            }
-        },
-        {
-            url: 'https://api.openproxy.space/judge',
-            ssl: true,
-            validate: {
-                enabled: false,
-                value: 'proxyjudge.info'
+                enabled: true,
+                value: 'yandex'
             }
         },
         {
             url: 'http://www.sbjudge3.com/azenv.php',
             ssl: false,
             validate: {
-                enabled: false,
+                enabled: true,
                 value: 'sbjudge3.com'
             }
         },
@@ -46,7 +38,7 @@ export const DEFAULT_SETTINGS = {
             url: 'http://proxyjudge.us/azenv.php',
             ssl: false,
             validate: {
-                enabled: false,
+                enabled: true,
                 value: 'proxyjudge.us'
             }
         },
@@ -54,7 +46,7 @@ export const DEFAULT_SETTINGS = {
             url: 'http://azenv.net/',
             ssl: false,
             validate: {
-                enabled: false,
+                enabled: true,
                 value: 'azenv.net'
             }
         },
@@ -62,7 +54,7 @@ export const DEFAULT_SETTINGS = {
             url: 'http://www.cooleasy.com/azenv.php',
             ssl: false,
             validate: {
-                enabled: false,
+                enabled: true,
                 value: 'cooleasy.com'
             }
         },
@@ -70,7 +62,7 @@ export const DEFAULT_SETTINGS = {
             url: 'http://www.proxy-listen.de/azenv.php',
             ssl: false,
             validate: {
-                enabled: false,
+                enabled: true,
                 value: 'proxy-listen.de'
             }
         }

@@ -1,4 +1,4 @@
-export const LOOKUP_URL = 'https://api.openproxy.space/ip';
+export const LOOKUP_URL = 'https://api.ipify.org';
 
 export const LOOKUP_CONFIG = {
     timeout: 5000,
