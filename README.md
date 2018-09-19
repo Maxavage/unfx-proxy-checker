@@ -1,12 +1,12 @@
 # Unfx Proxy Checker
 Unfx Proxy Checker - Open source proxy checker built on (Electron/React/Redux).
 
-With configured hot module replacement. You can be use as electron-react-redux-postcss template.
+With configured hot module replacement. You can use this as electron-react-redux-postcss template.
 
 ![](https://github.com/assnctr/unfx-proxy-checker/blob/master/public/unfx.gif?raw=true)
 
 ```
-Current version 1.1.0
+Current version 1.1.1
 ```
 
 Download Latest Build [Here](https://openproxy.space/software/proxy-checker) or on github releases page
@@ -23,17 +23,34 @@ Timeout
 Min 1000
 Max 60000
 ```
-Selectable protocols for check.
-```
-Support protocols:
-Http, Https, Socks4, Socks5.
-```
-Retry
-```
-Retries the check if has been received bad response (on each protocol separately).
-```
 
-## Data capturing
+#### Support protocols (selectable):
+Http, Https, Socks4, Socks5.
+
+#### Retry
+Retries the check if has been received bad response (on each protocol separately).
+
+
+# Judges
+Support Multiple proxy judges. With response validating.
+
+#### For SSL
+> Uses only for HTTPS requests.
+
+If disabled - uses as 'usual' for HTTP/SOCKS4/SOCKS5.
+
+#### Validate
+> Proxy will be valid is validate string was found in response body.
+
+If disabled - allow all responses.
+
+#### Swap
+> Swaps next judge url after each request, for acceleration and keep min server busy.
+
+If disabled - uses judge with min response timeout.
+
+
+# Data capturing
 Capture full data
 ```
 Capture and save all response data (body, timings, headers) for looking at the results page.
@@ -47,8 +64,8 @@ Server: Apache, Nginx
 OS: Ubuntu, CentOS
 ```
 
-## Simplified filtering and Export
-Filter proxy list at protocol, anon, country, keep-alive.
+# Simple filtering and results export
+Filter proxy list by protocols, anons, countries, keep-alive.
 
 Search by:
 ```
@@ -59,10 +76,10 @@ Example:
 put "Mikrotik" and will be captured only Mikrotik proxies. If we put "Mikrotik Squid 8080" will be captured Mikrotik proxies, Squid proxies and 8080 port proxies.
 ```
 
-Export currently filtered proxy list.
+Exports currently filtered proxy list.
 
-## Updates
-Auto checking at updates and notification is latest version available.
+#### Updates
+#### Auto checking at updates and notification is latest version available.
 
 ## Openproxy.space resource:
 * [Open Proxy Space](https://openproxy.space) - The largest open proxy list database.
