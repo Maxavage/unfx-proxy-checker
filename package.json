@@ -10,7 +10,8 @@
     "start": "run-p start:*",
     "start:main": "electron --require @babel/register src/index",
     "start:renderer": "cross-env NODE_ENV=development webpack-dev-server -d --config webpack.config.renderer.babel.js",
-    "package": "npm run build && electron-builder --dir --arch=all"
+    "package": "npm run build && electron-builder --linux --win",
+    "publish": "npm run build && electron-builder --linux --win --publish always"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.0",
@@ -53,22 +54,56 @@
     "webpack-dev-server": "^3.1.8"
   },
   "build": {
+    "appId": "com.github.assnctr.unfxproxychecker",
     "win": {
-      "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64",
-            "ia32"
-          ]
-        }
-      ],
-      "icon": "/public/icons/icon.ico"
+      "target": [{
+        "target": "zip",
+        "arch": ["x64", "ia32"]
+      },
+      {
+        "target": "nsis-web",
+        "arch": ["x64", "ia32"]
+      },
+      {
+        "target": "portable",
+        "arch": ["x64", "ia32"]
+      }],
+      "icon": "/public/icons/icon.ico",
+      "artifactName": "${name}-v${version}-${arch}-${os}.${ext}"
     },
-    "productName": "UNFX Proxy Checker",
+    "linux": {
+      "target": [{
+        "target": "AppImage",
+        "arch": ["x64", "ia32", "arm64", "armv7l"]
+      },
+      {
+        "target": "zip",
+        "arch": ["x64", "ia32", "arm64", "armv7l"]
+      }],
+      "icon": "/public/icons/icon.ico",
+      "artifactName": "${name}-v${version}-${arch}-${os}.${ext}"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "assnctr",
+        "repo": "unfx-proxy-checker",
+        "private": false
+      }
+    ],
+    "productName": "Unfx Proxy Checker",
     "copyright": "2018 assnctr (openproxy.space)",
     "extraResources": [
       "./files/**"
-    ]
+    ],
+    "portable" :{
+      "artifactName": "${name}-v${version}-${arch}-${os}-portable.${ext}"
+    },
+    "nsisWeb": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true,
+      "differentialPackage": true
+    }
   }
 }
