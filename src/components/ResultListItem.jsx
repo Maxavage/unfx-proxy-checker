@@ -18,7 +18,7 @@ class ResultListItem extends React.PureComponent {
 }
 
 export class ResultListItemWithSignatures extends ResultListItem {
-    render() {
+    render = () => {
         const { ip, port, count, protocols, anons, country, timeout, extra, data } = this.props;
 
         return (
@@ -61,11 +61,11 @@ export class ResultListItemWithSignatures extends ResultListItem {
                 {this.state.isDataOpened ? <ResultItemData {...data} /> : null}
             </div>
         );
-    }
+    };
 }
 
 export class ResultListItemWithoutSignatures extends ResultListItem {
-    render() {
+    render = () => {
         const { ip, port, count, protocols, anons, country, timeout, data } = this.props;
 
         return (
@@ -98,5 +98,5 @@ export class ResultListItemWithoutSignatures extends ResultListItem {
                 {this.state.isDataOpened ? <ResultItemData {...data} /> : null}
             </div>
         );
-    }
+    };
 }

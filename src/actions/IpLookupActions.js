@@ -15,7 +15,7 @@ export const toInitialState = () => ({
 
 export const IpLookup = chainEvent => async (dispatch, getState) => {
     const { settings, ip } = getState();
-    
+
     if (ip.locked) {
         return;
     }

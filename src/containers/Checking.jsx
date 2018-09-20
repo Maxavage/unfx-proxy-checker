@@ -7,7 +7,7 @@ import '../../public/styles/Checking.postcss';
 
 const Checking = props => (
     <div className={`checking-page ${props.state.isOpened ? 'opened' : ''}`}>
-        <Counter { ...props.state.counter } />
+        <Counter {...props.state.counter} />
         <button onClick={props.stop}>Stop</button>
     </div>
 );
@@ -20,4 +20,7 @@ const mapDispatchToProps = {
     stop
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Checking);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Checking);

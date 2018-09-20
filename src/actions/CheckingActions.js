@@ -71,16 +71,14 @@ export const start = () => async (dispatch, getState) => {
 
         const protocols = validateProtocols(settings.protocols);
         const judgesList = validateJudges(settings.judgesList, protocols);
+        const proxies = parseInputProxies(input);
         const initJudges = await new Judges({ swap: options.swapJudges, items: judgesList }, protocols);
-
-        const chainCheck = ip => {
-            Core.start(parseInputProxies(input), options, initJudges, protocols, ip);
-        };
+        const chainCheck = ip => Core.start(proxies, options, initJudges, protocols, ip);
 
         if (isIP(settings.ip.current)) {
             chainCheck(settings.ip.current);
         } else {
-            dispatch(IpLookup(chainCheck.bind(this)));
+            dispatch(IpLookup(chainCheck));
         }
 
         saveSettings({
@@ -94,9 +92,7 @@ export const start = () => async (dispatch, getState) => {
     }
 };
 
-export const stop = () => () => {
-    Core.stop();
-};
+export const stop = () => () => Core.stop();
 
 export const toggleOpen = () => ({
     type: TOGGLE_CHECKING_OPEN

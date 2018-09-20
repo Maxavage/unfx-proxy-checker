@@ -5,7 +5,6 @@ import { uniq } from '../misc/uniq';
 import { lookup } from './country';
 import { toggleOpen as toggleChecking, upCounterStatus } from '../actions/CheckingActions';
 import { toggleOpen as toggleResult, addResult } from '../actions/ResultActions';
-import Judges from './judges';
 
 export default class Checker {
     constructor(proxies, options, ip, judges, checkProtocols) {

@@ -17,14 +17,12 @@ export default class SettingsAddJudge extends React.PureComponent {
         addSettingsJudge(this.state.url);
     };
 
-    render = () => {
-        return (
-            <div className="content">
-                <input type="text" className="field" onChange={this.changeUrl} value={this.state.url} placeholder="Url:" />
-                <button className="add-url-button" onClick={this.addUrl}>
-                    Add
-                </button>
-            </div>
-        );
-    };
+    render = () => (
+        <div className="content">
+            <input type="text" className="field" onChange={this.changeUrl} value={this.state.url} placeholder="Url:" />
+            <button className="add-url-button" onClick={this.addUrl}>
+                Add
+            </button>
+        </div>
+    );
 }
