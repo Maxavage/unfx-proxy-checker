@@ -1,6 +1,8 @@
+import path from 'path';
 import { LOOKUP_URL } from './IpLookupConfigConstants';
 
 export const SETTINGS_FILE_NAME = 'settings.unfx.json';
+export const SETTINGS_FILE_PATH = process.env.PORTABLE_EXECUTABLE_DIR ? path.resolve(process.env.PORTABLE_EXECUTABLE_DIR, SETTINGS_FILE_NAME) : SETTINGS_FILE_NAME;
 
 export const DEFAULT_SETTINGS = {
     threads: 350,
