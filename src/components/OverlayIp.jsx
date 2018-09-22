@@ -1,9 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
 
 import '../../public/styles/IpLookup.postcss';
 
-const Ip = ({ status: { isActive, currentIP, isLookupDone, isLookupSuccess } }) => (
+const OverlayIp = ({ isActive, currentIP, isLookupDone, isLookupSuccess }) => (
     <div className={`ip-lookup ${isActive ? 'opened' : ''}`}>
         <div className={`checking-status ${isLookupDone ? 'done' : 'processing'}`}>
             <div className="loader">
@@ -15,8 +14,4 @@ const Ip = ({ status: { isActive, currentIP, isLookupDone, isLookupSuccess } }) 
     </div>
 );
 
-const mapStateToProps = state => ({
-    status: state.ip
-});
-
-export default connect(mapStateToProps)(Ip);
+export default OverlayIp;

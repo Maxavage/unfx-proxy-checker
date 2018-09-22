@@ -1,6 +1,6 @@
 import rp from 'request-promise';
 import store from '../store';
-import { changeState, changeJudgePingState, startPing } from '../actions/JudgesActions';
+import { changeState, changeJudgePingState, startPing } from '../actions/OverlayJudgesActions';
 import { wait } from '../misc/wait';
 
 export default class Judges {

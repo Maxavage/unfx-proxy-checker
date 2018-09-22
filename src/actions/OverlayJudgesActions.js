@@ -1,7 +1,7 @@
-import { JUDGES_CHANGE_STATE, JUDGE_CHANGE_PING_STATE } from '../constants/ActionTypes';
+import { OVERLAY_JUDGES_CHANGE_STATE, OVERLAY_JUDGE_CHANGE_PING_STATE } from '../constants/ActionTypes';
 
 export const changeState = state => ({
-    type: JUDGES_CHANGE_STATE,
+    type: OVERLAY_JUDGES_CHANGE_STATE,
     state
 });
 
@@ -22,7 +22,7 @@ export const startPing = () => (dispatch, getState) => {
 };
 
 export const changeJudgePingState = (url, state) => ({
-    type: JUDGE_CHANGE_PING_STATE,
+    type: OVERLAY_JUDGE_CHANGE_PING_STATE,
     url,
     state
 });

@@ -4,7 +4,7 @@ import check from 'check-types';
 import { uniq } from '../misc/uniq';
 import { findProxies, isURL, isIP } from '../misc/regexes';
 import { saveSettings } from '../core/settings';
-import { IpLookup } from './IpLookupActions';
+import { IpLookup } from './OverlayIpActions';
 import { UP_COUNTER_STATUS, TOGGLE_CHECKING_OPEN } from '../constants/ActionTypes';
 
 const validateOptions = options => {
@@ -54,9 +54,14 @@ const parseInputProxies = list => {
 
 export const start = () => async (dispatch, getState) => {
     try {
-        const { settings, input, judges, ip } = getState();
+        const {
+            settings,
+            input,
+            checking,
+            overlay: { judges, ip }
+        } = getState();
 
-        if (judges.locked || ip.locked) {
+        if (judges.locked || ip.locked || checking.isOpened) {
             return;
         }
 

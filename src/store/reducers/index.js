@@ -4,17 +4,15 @@ import checking from './checking';
 import input from './input';
 import update from './update';
 import result from './result';
-import ip from './ip';
-import judges from './judges';
+import overlay from './overlay';
 
 const mainReducer = combineReducers({
     settings,
     checking,
     input,
     result,
-    ip,
-    update,
-    judges
+    overlay,
+    update
 });
 
 export default mainReducer;

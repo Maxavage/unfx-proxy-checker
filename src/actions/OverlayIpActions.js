@@ -2,19 +2,22 @@ import { getIP } from '../core/ip';
 import { changeSettings } from './SettingsActions';
 import { wait } from '../misc/wait';
 import { isIP } from '../misc/regexes';
-import { CHANGE_IP_LOOKUP_STATUS, CHANGE_IP_LOOKUP_TO_INITIAL } from '../constants/ActionTypes';
+import { OVERLAY_IP_CHANGE_LOOKUP_STATUS, OVERLAY_IP_CHANGE_LOOKUP_TO_INITIAL } from '../constants/ActionTypes';
 
 export const changeIpLookupStatus = status => ({
-    type: CHANGE_IP_LOOKUP_STATUS,
+    type: OVERLAY_IP_CHANGE_LOOKUP_STATUS,
     status
 });
 
 export const toInitialState = () => ({
-    type: CHANGE_IP_LOOKUP_TO_INITIAL
+    type: OVERLAY_IP_CHANGE_LOOKUP_TO_INITIAL
 });
 
 export const IpLookup = chainEvent => async (dispatch, getState) => {
-    const { settings, ip } = getState();
+    const {
+        settings,
+        overlay: { ip }
+    } = getState();
 
     if (ip.locked) {
         return;

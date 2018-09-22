@@ -1,9 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
 
 import '../../public/styles/Judges.postcss';
 
-const Judges = ({ status: { isActive, items } }) => (
+const OverlayJudges = ({ isActive, items }) => (
     <div className={`ping-judges ${isActive ? 'opened' : ''}`}>
         <div className="ping-status">
             <div className="items">
@@ -31,8 +30,4 @@ const Judges = ({ status: { isActive, items } }) => (
     </div>
 );
 
-const mapStateToProps = state => ({
-    status: state.judges
-});
-
-export default connect(mapStateToProps)(Judges);
+export default OverlayJudges;

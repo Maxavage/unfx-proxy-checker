@@ -2,11 +2,10 @@ import React from 'react';
 import Settings from '../containers/Settings';
 import ProxyInput from '../containers/ProxyInput';
 import Checking from '../containers/Checking';
-import Judges from '../containers/Judges';
+import Overlay from '../containers/Overlay';
 import Update from './Update';
 import Footer from './Footer';
 import Result from '../containers/Result';
-import Ip from '../containers/Ip';
 import { start } from '../actions/CheckingActions';
 import { connect } from 'react-redux';
 
@@ -25,8 +24,7 @@ const Main = ({ start }) => (
         </div>
         <Checking />
         <Result />
-        <Ip />
-        <Judges />
+        <Overlay />
     </div>
 );
 

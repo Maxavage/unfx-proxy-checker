@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { changeSettings, changeSettingsJudge, addSettingsJudge, removeSettingsJudge } from '../actions/SettingsActions';
-import { IpLookup } from '../actions/IpLookupActions';
+import { IpLookup } from '../actions/OverlayIpActions';
 import SettingsJudgeItem from '../components/SettingsJudgeItem';
 import SettingsAddJudge from '../components/SettingsAddJudge';
 
