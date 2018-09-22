@@ -3,7 +3,7 @@ Unfx Proxy Checker - Open source proxy checker built on (Electron/React/Redux).
 
 With configured hot module replacement. You can use this as electron-react-redux-postcss template.
 
-![](https://github.com/assnctr/unfx-proxy-checker/blob/master/public/unfx.gif?raw=true)
+![](https://github.com/assnctr/unfx-proxy-checker/blob/master/files/unfx.gif?raw=true)
 
 ```
 Current version 1.1.1
@@ -31,10 +31,10 @@ Http, Https, Socks4, Socks5.
 Retries the check if has been received bad response (on each protocol separately).
 
 
-# Judges
+## Judges
 Support Multiple proxy judges. With response validating.
 
-#### For SSL
+#### Only for SSL
 > Uses only for HTTPS requests.
 
 If disabled - uses as 'usual' for HTTP/SOCKS4/SOCKS5.
@@ -50,7 +50,7 @@ If disabled - allow all responses.
 If disabled - uses judge with min response timeout.
 
 
-# Data capturing
+## Data capturing
 Capture full data
 ```
 Capture and save all response data (body, timings, headers) for looking at the results page.
@@ -64,7 +64,7 @@ Server: Apache, Nginx
 OS: Ubuntu, CentOS
 ```
 
-# Simple filtering and results export
+## Simple filtering and results export
 Filter proxy list by protocols, anons, countries, keep-alive.
 
 Search by:
