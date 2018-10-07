@@ -21,7 +21,7 @@ export const DEFAULT_JUDGES_SETTINGS = {
     swap: true,
     items: [
         {
-            url: 'http://proxyjudge.info/',
+            url: 'http://proxyjudge.info/azenv.php',
             ssl: false,
             validate: {
                 enabled: true,
@@ -34,6 +34,14 @@ export const DEFAULT_JUDGES_SETTINGS = {
             validate: {
                 enabled: true,
                 value: 'yandex'
+            }
+        },
+        {
+            url: 'https://www.wikipedia.org/',
+            ssl: true,
+            validate: {
+                enabled: true,
+                value: 'wikipedia'
             }
         },
         {
@@ -66,6 +74,14 @@ export const DEFAULT_JUDGES_SETTINGS = {
             validate: {
                 enabled: true,
                 value: 'cooleasy.com'
+            }
+        },
+        {
+            url: 'http://pascal.hoez.free.fr/azenv.php',
+            ssl: false,
+            validate: {
+                enabled: true,
+                value: 'pascal.hoez.free.fr'
             }
         },
         {
