@@ -40,30 +40,30 @@ export const IpLookup = chainEvent => async (dispatch, getState) => {
     try {
         const response = await getIP(ip.lookupUrl);
 
-        if (isIP(response)) {
-            await wait(500);
-            dispatch(
-                changeIpLookupStatus({
-                    currentIP: response,
-                    isLookupDone: true,
-                    isLookupSuccess: true
-                })
-            );
-
-            dispatch(setIP(response));
-
-            await wait(1000);
-            dispatch(changeIpLookupStatus({ isActive: false }));
-
-            if (chainEvent) {
-                chainEvent(response);
-            }
-
-            await wait(500);
-            dispatch(toInitialState());
-        } else {
-            onError();
+        if (!isIP(response)) {
+            return onError();
         }
+
+        await wait(500);
+        dispatch(
+            changeIpLookupStatus({
+                currentIP: response,
+                isLookupDone: true,
+                isLookupSuccess: true
+            })
+        );
+
+        dispatch(setIP(response));
+
+        await wait(1000);
+        dispatch(changeIpLookupStatus({ isActive: false }));
+
+        if (chainEvent) {
+            chainEvent(response);
+        }
+
+        await wait(500);
+        dispatch(toInitialState());
     } catch (error) {
         onError();
     }
