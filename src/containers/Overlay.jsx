@@ -5,9 +5,4 @@ import { connect } from 'react-redux';
 
 const Overlay = ({ ip, judges }) => [<OverlayIp key='ip' {...ip} />, <OverlayJudges key='judges' {...judges} />];
 
-const mapStateToProps = ({ overlay: { ip, judges } }) => ({
-    ip,
-    judges
-});
-
-export default connect(mapStateToProps)(Overlay);
+export default connect(state => ({ ...state.overlay }))(Overlay);
