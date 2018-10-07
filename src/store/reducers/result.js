@@ -34,7 +34,7 @@ const initialState = {
     search: ''
 };
 
-const list = (state = initialState, action) => {
+const result = (state = initialState, action) => {
     switch (action.type) {
         case ADD_RESULT:
             return {
@@ -102,4 +102,4 @@ const list = (state = initialState, action) => {
     }
 };
 
-export default list;
+export default result;
