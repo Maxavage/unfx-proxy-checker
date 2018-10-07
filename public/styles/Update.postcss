@@ -1,3 +1,7 @@
+:root {
+    --green-color: #31bc86;
+}
+
 .update-notify {
     position: fixed;
     background-color: #e0f5ed;
@@ -13,41 +17,37 @@
     overflow: auto;
     opacity: 1;
     z-index: 3;
-
-    -webkit-transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-    -moz-transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-    -ms-transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
     transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-}
 
-.update-notify.closed {
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-    opacity: 0;
-    visibility: hidden;
-    z-index: 0;
-}
+    &.closed {
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        opacity: 0;
+        visibility: hidden;
+        z-index: 0;
+    }
 
-.update-notify.checking {
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-}
+    &.checking {
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+    }
 
-.update-notify.downloading {
-    width: 400px;
-    height: 100px;
-    left: calc(50% - 200px);
-    top: calc(50% - 50px);
-    overflow: hidden;
-}
+    &.downloading {
+        width: 400px;
+        height: 100px;
+        left: calc(50% - 200px);
+        top: calc(50% - 50px);
+        overflow: hidden;
 
-.update-notify.downloading .update-container {
-    transform: translateY(-100%);
-    opacity: 0;
+        & .update-container {
+            transform: translateY(-100%);
+            opacity: 0;
+        }
+    }
 }
 
 .download-progress {
@@ -66,10 +66,6 @@
     background-color: rgba(49, 188, 135, 0.75);
     height: 100%;
     border-radius: 0.25em;
-
-    -webkit-transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-    -moz-transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-    -ms-transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
     transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
@@ -77,57 +73,45 @@
     position: relative;
     transform: translateY(0);
     opacity: 1;
-
-    -webkit-transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-    -moz-transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-    -ms-transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
     transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-.update-version {
-    color: #fff;
+.update-section-split {
+    color: color-mod(var(--green-color) alpha(35%));
     overflow: hidden;
-}
-
-.update-description,
-.update-features {
-    margin-top: 1em;
-    background-color: rgba(255, 255, 255, 0.35);
-    padding: 1em;
-    border-radius: 0.25em;
+    border-bottom: 1px solid color-mod(var(--green-color) alpha(15%));
+    padding: 0.75em 0;
 }
 
 .update-description {
-    color: rgba(49, 188, 134, 0.75);
-}
-
-.feature-item {
-    margin-bottom: 1em;
-}
-
-.feature-item .feature-name {
-    font-weight: 400;
-    color: rgba(49, 188, 134, 0.5);
-}
-
-.feature-item .feature-description {
-    color: rgba(49, 188, 134, 0.75);
-}
-
-.feature-item:last-child {
-    margin-bottom: 0;
+    color: color-mod(var(--green-color) alpha(50%));
+    margin: 2em 0;
 }
 
 .update-download {
-    margin: 2em 0;
+    margin: 1em 0 2em 0;
     display: flex;
-    flex-flow: row nowrap;
+    flex-flow: column nowrap;
 
-    & button {
-        margin: 0;
+    & a {
+        color: color-mod(var(--green-color) alpha(50%));
+        text-decoration: none;
+        transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        margin: 0.15em 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
 
-        &:nth-child(2) {
-            margin-left: 1em;
+
+        &:hover {
+            color: var(--green-color);
+        }
+
+        & span.size {
+            margin-right: 0.5em;
+            color: #607D8B;
+            font-size: 0.85em;
+            text-decoration: none;
         }
     }
 }

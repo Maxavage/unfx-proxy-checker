@@ -45,15 +45,15 @@ const upDownloadProgress = percent => ({
     percent
 });
 
-export const download = arch => async (dispatch, getState) => {
-    const download = getState().update.info.downloads[arch];
+export const download = e => async dispatch => {
+    e.preventDefault();
 
     let savePath = dialog.showSaveDialog({
-        defaultPath: download.filename,
+        defaultPath: e.target.title,
         filters: [
             {
-                name: 'Archive',
-                extensions: ['rar']
+                name: '.rar, .exe, .zip, .7z',
+                extensions: ['rar', 'exe', 'zip', '7z']
             }
         ]
     });
@@ -62,7 +62,7 @@ export const download = arch => async (dispatch, getState) => {
 
     dispatch(changeUpdateState({ onDownloading: true }));
 
-    progress(request(download.fullUrl), {
+    progress(request(e.target.href), {
         throttle: 100
     })
         .on('progress', state => {

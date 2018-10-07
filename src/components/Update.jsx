@@ -1,6 +1,8 @@
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
 import { connect } from 'react-redux';
 import { checkAtAvailable, close, download } from '../actions/UpdateActions';
+import { bytesToSize } from '../misc/text';
 
 import '../../public/styles/Update.postcss';
 
@@ -10,15 +12,8 @@ class Update extends React.PureComponent {
         checkAtAvailable();
     };
 
-    dl32 = () => this.props.download('x32');
-    dl64 = () => this.props.download('x64');
-
     render = () => {
-        const {
-            state: { isOpened, isAvailable, isChecking, onDownloading, downloadProgress, info },
-            close
-        } = this.props;
-
+        const { isOpened, isAvailable, isChecking, onDownloading, downloadProgress, info, close, download } = this.props;
         const progress = { width: downloadProgress + '%' };
 
         return (
@@ -30,20 +25,19 @@ class Update extends React.PureComponent {
                 {isAvailable ? (
                     <div className="update-container">
                         <div className="update-content">
-                            <div className="update-version">Available version: {info.latest}</div>
-                            <div className="update-description">{info.description}</div>
-                            <div className="update-features">
-                                {info.features.map((item, index) => (
-                                    <div className="feature-item" key={index}>
-                                        <div className="feature-name">{item.name}</div>
-                                        <div className="feature-description">{item.description}</div>
-                                    </div>
-                                ))}
+                            <div className="update-section-split">Available version: {info.version}</div>
+                            <div className="update-description">
+                                <ReactMarkdown source={info.releaseData.body} />
                             </div>
+                            <div className="update-section-split">Downloads</div>
                         </div>
                         <div className="update-download">
-                            <button onClick={this.dl32}>Download x32</button>
-                            <button onClick={this.dl64}>Download x64</button>
+                            {info.releaseData.assets.map(asset => (
+                                <a key={asset.name} href={asset.browser_download_url} title={asset.name} onClick={download}>
+                                    <span className="size">{bytesToSize(asset.size)}</span>
+                                    {asset.name}
+                                </a>
+                            ))}
                         </div>
                         <button onClick={close}>Ok</button>
                     </div>
@@ -63,7 +57,7 @@ class Update extends React.PureComponent {
 }
 
 const mapStateToProps = state => ({
-    state: state.update
+    ...state.update
 });
 
 const mapDispatchToProps = {

@@ -7,10 +7,14 @@ const { app: { getVersion } } = remote;
 export const currentVersion = getVersion();
 
 export const getLatestVersionInfo = async () => {
-    const versionInfo = await rp.get(FETCH_CONFIG);
-
-    if (versionInfo.latest > currentVersion) {
-        return versionInfo;
+    const releaseData = await rp.get(FETCH_CONFIG);
+    const version = releaseData.tag_name.slice(1);
+    
+    if (version > currentVersion) {
+        return {
+            version,
+            releaseData
+        };
     }
 
     return false;
