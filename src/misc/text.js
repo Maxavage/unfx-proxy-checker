@@ -14,11 +14,13 @@ export const getContentSize = content => {
         if (code >= 0xdc00 && code <= 0xdfff) i--;
     }
 
-    const result = size / 1024;
+    return bytesToSize(size);
+};
 
-    if (result >= 1024) {
-        return `${(result / 1024).toFixed(2)} MB`;
-    } else {
-        return `${result.toFixed(2)} KB`;
-    }
+export const bytesToSize = bytes => {
+    if (bytes == 0) return '0 Byte';
+    
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+    return `${Math.round(bytes / Math.pow(1024, i))} ${sizes[i]}`;
 };
