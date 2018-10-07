@@ -58,21 +58,19 @@ export const download = arch => async (dispatch, getState) => {
         ]
     });
 
-    if (savePath) {
-        dispatch(changeUpdateState({ onDownloading: true }));
-    
-        progress(request(download.fullUrl), {
-            throttle: 100
-        })
+    if (!savePath) return;
+
+    dispatch(changeUpdateState({ onDownloading: true }));
+
+    progress(request(download.fullUrl), {
+        throttle: 100
+    })
         .on('progress', state => {
             dispatch(upDownloadProgress(state.percent * 100));
         })
         .on('end', () => {
-            setTimeout(() => {
-                shell.showItemInFolder(savePath);
-                getCurrentWindow().close();
-            }, 300);
+            shell.showItemInFolder(savePath);
+            getCurrentWindow().close();
         })
         .pipe(createWriteStream(savePath));
-    }
 };

@@ -1,19 +1,12 @@
-import { getSettings } from '../../core/settings';
-import { CHANGE_SETTINGS, CHANGE_SETTINGS_JUDGE, ADD_SETTINGS_JUDGE, REMOVE_SETTINGS_JUDGE } from '../../constants/ActionTypes';
+import { initial } from '../../core/settings';
+import { CHANGE_JUDGE, ADD_JUDGE, REMOVE_JUDGE, TOGGLE_JUDGES_OPTION } from '../../constants/ActionTypes';
 
-const initialSettings = getSettings();
-
-const settings = (state = initialSettings, action) => {
+const judges = (state = initial.judges, action) => {
     switch (action.type) {
-        case CHANGE_SETTINGS:
+        case CHANGE_JUDGE:
             return {
                 ...state,
-                ...action.settings
-            };
-        case CHANGE_SETTINGS_JUDGE:
-            return {
-                ...state,
-                judgesList: state.judgesList.map(item => {
+                items: state.items.map(item => {
                     if (item.url == action.url) {
                         return {
                             ...item,
@@ -24,12 +17,12 @@ const settings = (state = initialSettings, action) => {
                     return item;
                 })
             };
-        case ADD_SETTINGS_JUDGE:
-            if (state.judgesList.every(item => item.url != action.url)) {
+        case ADD_JUDGE:
+            if (state.items.every(item => item.url != action.url)) {
                 return {
                     ...state,
-                    judgesList: [
-                        ...state.judgesList,
+                    items: [
+                        ...state.items,
                         {
                             url: action.url,
                             ssl: false,
@@ -43,14 +36,19 @@ const settings = (state = initialSettings, action) => {
             }
 
             return state;
-        case REMOVE_SETTINGS_JUDGE:
+        case REMOVE_JUDGE:
             return {
                 ...state,
-                judgesList: state.judgesList.filter(item => item.url != action.url)
+                items: state.items.filter(item => item.url != action.url)
+            };
+        case TOGGLE_JUDGES_OPTION:
+            return {
+                ...state,
+                [action.target]: !state[action.target]
             };
         default:
             return state;
     }
 };
 
-export default settings;
+export default judges;

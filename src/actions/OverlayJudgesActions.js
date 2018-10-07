@@ -6,17 +6,15 @@ export const changeState = state => ({
 });
 
 export const startPing = () => (dispatch, getState) => {
-    const { settings } = getState();
+    const { judges } = getState();
 
-    const parsejudges = settings.judgesList.map(item => {
-        return {
-            url: item.url,
-            state: {
-                checking: true,
-                working: false
-            }
+    const parsejudges = judges.items.map(item => ({
+        url: item.url,
+        state: {
+            checking: true,
+            working: false
         }
-    });
+    }));
 
     dispatch(changeState({ isActive: true, locked: true, items: parsejudges }));
 };

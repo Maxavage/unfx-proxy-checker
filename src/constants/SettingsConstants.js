@@ -1,17 +1,25 @@
 import path from 'path';
-import { LOOKUP_URL } from './IpLookupConfigConstants';
 
 export const SETTINGS_FILE_NAME = 'settings.unfx.json';
 export const SETTINGS_FILE_PATH = process.env.PORTABLE_EXECUTABLE_DIR ? path.resolve(process.env.PORTABLE_EXECUTABLE_DIR, SETTINGS_FILE_NAME) : SETTINGS_FILE_NAME;
 
-export const DEFAULT_SETTINGS = {
+export const DEFAULT_CORE_SETTINGS = {
     threads: 350,
     timeout: 15000,
     retry: false,
     captureFullData: false,
     captureExtraData: false,
-    swapJudges: true,
-    judgesList: [
+    protocols: {
+        http: true,
+        https: true,
+        socks4: true,
+        socks5: true
+    }
+};
+
+export const DEFAULT_JUDGES_SETTINGS = {
+    swap: true,
+    items: [
         {
             url: 'http://proxyjudge.info/',
             ssl: false,
@@ -68,15 +76,16 @@ export const DEFAULT_SETTINGS = {
                 value: 'proxy-listen.de'
             }
         }
-    ],
-    protocols: {
-        http: true,
-        https: true,
-        socks4: true,
-        socks5: true
-    },
-    ip: {
-        current: '',
-        lookupUrl: LOOKUP_URL
-    }
+    ]
+};
+
+export const DEFAULT_IP_SETTINGS = {
+    current: '',
+    lookupUrl: 'https://api.ipify.org'
+};
+
+export const MERGED_DEFAULT_SETTINGS = {
+    core: DEFAULT_CORE_SETTINGS,
+    judges: DEFAULT_JUDGES_SETTINGS,
+    ip: DEFAULT_IP_SETTINGS
 };

@@ -27,7 +27,7 @@
     "check-types": "^7.4.0",
     "cross-env": "^5.2.0",
     "css-loader": "^1.0.0",
-    "electron": "^3.0.0",
+    "electron": "^3.0.3",
     "electron-builder": "^20.28.4",
     "electron-devtools-installer": "^2.2.4",
     "file-loader": "^2.0.0",
@@ -56,30 +56,44 @@
   "build": {
     "appId": "com.github.assnctr.unfxproxychecker",
     "win": {
-      "target": [{
-        "target": "zip",
-        "arch": ["x64", "ia32"]
-      },
-      {
-        "target": "nsis-web",
-        "arch": ["x64", "ia32"]
-      },
-      {
-        "target": "portable",
-        "arch": ["x64", "ia32"]
-      }],
+      "target": [
+        {
+          "target": "zip",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        },
+        {
+          "target": "nsis-web",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ],
       "icon": "/public/icons/icon.ico",
       "artifactName": "${name}-v${version}-${arch}-${os}.${ext}"
     },
     "linux": {
-      "target": [{
-        "target": "AppImage",
-        "arch": ["x64", "ia32", "arm64", "armv7l"]
-      },
-      {
-        "target": "zip",
-        "arch": ["x64", "ia32", "arm64", "armv7l"]
-      }],
+      "target": [
+        {
+          "target": "zip",
+          "arch": [
+            "x64",
+            "ia32",
+            "arm64",
+            "armv7l"
+          ]
+        }
+      ],
       "icon": "/public/icons/icon.ico",
       "artifactName": "${name}-v${version}-${arch}-${os}.${ext}"
     },
@@ -96,7 +110,7 @@
     "extraResources": [
       "./files/**"
     ],
-    "portable" :{
+    "portable": {
       "artifactName": "${name}-v${version}-${arch}-${os}-portable.${ext}"
     },
     "nsisWeb": {

@@ -46,11 +46,9 @@ export default class Judges {
         }
 
         return () => {
-            // fetch and save current judge
             const current = this.list.ssl[this.usingStatus.ssl.current];
-            // increment next value
             this.usingStatus.ssl.current = this.usingStatus.ssl.current == this.usingStatus.ssl.max - 1 ? 0 : this.usingStatus.ssl.current + 1;
-            // after return fetched judge
+
             return current;
         };
     }
@@ -61,11 +59,9 @@ export default class Judges {
         }
 
         return () => {
-            // fetch and save current judge
             const current = this.list.usual[this.usingStatus.usual.current];
-            // increment next value
             this.usingStatus.usual.current = this.usingStatus.usual.current == this.usingStatus.usual.max - 1 ? 0 : this.usingStatus.usual.current + 1;
-            // after return fetched judge
+
             return current;
         };
     }

@@ -1,14 +1,14 @@
 import React from 'react';
 
-export default class SettingsJudgeItem extends React.PureComponent {
+export default class JudgesItem extends React.PureComponent {
     toggleSSL = () => {
-        const { changeSettingsJudge, url, ssl } = this.props;
-        changeSettingsJudge(url, { ssl: !ssl });
+        const { change, url, ssl } = this.props;
+        change(url, { ssl: !ssl });
     };
 
     toggleValidate = () => {
-        const { changeSettingsJudge, url, validate } = this.props;
-        changeSettingsJudge(url, {
+        const { change, url, validate } = this.props;
+        change(url, {
             validate: {
                 ...validate,
                 enabled: !validate.enabled
@@ -17,8 +17,8 @@ export default class SettingsJudgeItem extends React.PureComponent {
     };
 
     changeValidateString = e => {
-        const { changeSettingsJudge, url, validate } = this.props;
-        changeSettingsJudge(url, {
+        const { change, url, validate } = this.props;
+        change(url, {
             validate: {
                 ...validate,
                 value: e.target.value
@@ -27,8 +27,8 @@ export default class SettingsJudgeItem extends React.PureComponent {
     };
 
     remove = () => {
-        const { removeSettingsJudge, url } = this.props;
-        removeSettingsJudge(url);
+        const { remove, url } = this.props;
+        remove(url);
     };
 
     render = () => {

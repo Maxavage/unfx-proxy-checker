@@ -7,12 +7,12 @@ import { saveSettings } from '../core/settings';
 import { IpLookup } from './OverlayIpActions';
 import { UP_COUNTER_STATUS, TOGGLE_CHECKING_OPEN } from '../constants/ActionTypes';
 
-const validateOptions = options => {
+const validateCore = options => {
     options.threads = parseInt(options.threads);
     options.timeout = parseInt(options.timeout);
 
     if (check.inRange(options.threads, 1, 500) && check.inRange(options.timeout, 1000, 60000)) {
-        return options;
+        return true;
     }
 
     throw new Error('Min threads 1, Max 500. Min timeout 1000, Max 60000');
@@ -28,13 +28,13 @@ const validateJudges = (judges, targetProtocols) => {
     }
 
     if (judges.every(item => isURL(item.url))) {
-        return judges;
+        return true;
     }
 
     throw new Error('Judge URL is not correct');
 };
 
-const validateProtocols = protocols => {
+const transformProtocols = protocols => {
     const enabledProtocols = Object.keys(protocols).filter(protocol => protocols[protocol]);
 
     if (enabledProtocols.length > 0) {
@@ -54,42 +54,32 @@ const parseInputProxies = list => {
 
 export const start = () => async (dispatch, getState) => {
     try {
-        const {
-            settings,
-            input,
-            checking,
-            overlay: { judges, ip }
-        } = getState();
+        const { core, judges, ip, input, checking, overlay } = getState();
 
-        if (judges.locked || ip.locked || checking.isOpened) {
+        if (overlay.judges.locked || overlay.ip.locked || checking.isOpened) {
             return;
         }
 
-        const options = validateOptions({
-            threads: settings.threads,
-            timeout: settings.timeout,
-            retry: settings.retry,
-            captureExtraData: settings.captureExtraData,
-            captureFullData: settings.captureFullData,
-            swapJudges: settings.swapJudges
-        });
-
-        const protocols = validateProtocols(settings.protocols);
-        const judgesList = validateJudges(settings.judgesList, protocols);
         const proxies = parseInputProxies(input);
-        const initJudges = await new Judges({ swap: options.swapJudges, items: judgesList }, protocols);
-        const chainCheck = ip => Core.start(proxies, options, initJudges, protocols, ip);
+        const protocols = transformProtocols(core.protocols);
 
-        if (isIP(settings.ip.current)) {
-            chainCheck(settings.ip.current);
+        validateJudges(judges.items, protocols);
+        validateCore(core);
+
+        const initJudges = await new Judges(judges, protocols);
+        const chainCheck = ip => Core.start(proxies, core, initJudges, protocols, ip);
+
+        if (isIP(ip.current)) {
+            chainCheck(ip.current);
         } else {
             dispatch(IpLookup(chainCheck));
         }
 
         saveSettings({
-            ...settings,
+            core,
+            judges,
             ip: {
-                lookupUrl: settings.ip.lookupUrl
+                lookupUrl: ip.lookupUrl
             }
         });
     } catch (error) {

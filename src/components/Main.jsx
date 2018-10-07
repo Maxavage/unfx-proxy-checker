@@ -1,5 +1,5 @@
 import React from 'react';
-import Settings from '../containers/Settings';
+import Settings from './Settings';
 import ProxyInput from '../containers/ProxyInput';
 import Checking from '../containers/Checking';
 import Overlay from '../containers/Overlay';

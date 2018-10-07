@@ -1,7 +1,7 @@
 import React from 'react';
 import { isURL } from '../misc/regexes';
 
-export default class SettingsAddJudge extends React.PureComponent {
+export default class JudgesAddNew extends React.PureComponent {
     state = {
         url: ''
     };
@@ -13,8 +13,8 @@ export default class SettingsAddJudge extends React.PureComponent {
             return;
         }
 
-        const { addSettingsJudge } = this.props;
-        addSettingsJudge(this.state.url);
+        const { add } = this.props;
+        add(this.state.url);
     };
 
     render = () => (

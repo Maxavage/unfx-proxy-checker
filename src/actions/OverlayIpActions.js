@@ -1,8 +1,8 @@
 import { getIP } from '../core/ip';
-import { changeSettings } from './SettingsActions';
 import { wait } from '../misc/wait';
 import { isIP } from '../misc/regexes';
 import { OVERLAY_IP_CHANGE_LOOKUP_STATUS, OVERLAY_IP_CHANGE_LOOKUP_TO_INITIAL } from '../constants/ActionTypes';
+import { setIP } from './IpActions';
 
 export const changeIpLookupStatus = status => ({
     type: OVERLAY_IP_CHANGE_LOOKUP_STATUS,
@@ -14,12 +14,9 @@ export const toInitialState = () => ({
 });
 
 export const IpLookup = chainEvent => async (dispatch, getState) => {
-    const {
-        settings,
-        overlay: { ip }
-    } = getState();
+    const { ip, overlay } = getState();
 
-    if (ip.locked) {
+    if (overlay.ip.locked) {
         return;
     }
 
@@ -41,7 +38,7 @@ export const IpLookup = chainEvent => async (dispatch, getState) => {
     };
 
     try {
-        const response = await getIP(settings.ip.lookupUrl);
+        const response = await getIP(ip.lookupUrl);
 
         if (isIP(response)) {
             await wait(500);
@@ -53,7 +50,7 @@ export const IpLookup = chainEvent => async (dispatch, getState) => {
                 })
             );
 
-            dispatch(changeSettings({ ip: { ...settings.ip, current: response } }));
+            dispatch(setIP(response));
 
             await wait(1000);
             dispatch(changeIpLookupStatus({ isActive: false }));

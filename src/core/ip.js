@@ -1,12 +1,10 @@
 import rp from 'request-promise';
-import { LOOKUP_URL, LOOKUP_CONFIG } from '../constants/IpLookupConfigConstants';
+import { DEFAULT_IP_SETTINGS } from '../constants/SettingsConstants';
 
 export const getIP = url => {
     try {
-        return rp.get({
-            ...LOOKUP_CONFIG,
-            url: url ? url : LOOKUP_URL
-        });
+        const { lookupUrl } = DEFAULT_IP_SETTINGS;
+        return rp.get({ timeout: 5000, url: url ? url : lookupUrl });
     } catch (error) {
         throw new Error('Ip lookup fail. Try later.');
     }
