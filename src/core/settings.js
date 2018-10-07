@@ -8,7 +8,10 @@ export const saveSettings = setting => {
 const getSettings = () => {
     if (existsSync(SETTINGS_FILE_PATH)) {
         try {
-            return JSON.parse(readFileSync(SETTINGS_FILE_PATH, 'utf8'));
+            return {
+                ...MERGED_DEFAULT_SETTINGS,
+                ...JSON.parse(readFileSync(SETTINGS_FILE_PATH, 'utf8'))
+            }
         } catch (error) {
             return MERGED_DEFAULT_SETTINGS;
         }
