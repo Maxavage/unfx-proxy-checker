@@ -10,8 +10,8 @@ export default class Core {
         this.checker.stop();
     }
     
-    static start(proxies, options, judges, checkProtocols, ip) {
-        this.checker = new Checker(proxies, options, ip, judges, checkProtocols);
+    static start(proxies, options, judges, checkProtocols, ip, blacklist) {
+        this.checker = new Checker(proxies, options, ip, judges, checkProtocols, blacklist);
         this.checker.start();
     }
 }

@@ -1,17 +1,12 @@
 # Unfx Proxy Checker
-Unfx Proxy Checker - Open source proxy checker built on (Electron/React/Redux).
+Unfx Proxy Checker - Open source proxy checker built in Electron with React/Redux/Postcss.
 
 With configured hot module replacement. You can use this as electron-react-redux-postcss template.
 
+Download latest build [here](https://github.com/assnctr/unfx-proxy-checker/releases).
+
 ![](https://github.com/assnctr/unfx-proxy-checker/blob/master/files/unfx.gif?raw=true)
 
-```
-Current version 1.1.1
-```
-
-Download Latest Build [Here](https://openproxy.space/software/proxy-checker) or on github releases page
-
-## Settings
 Threads
 ```
 Maximum active checks
@@ -30,11 +25,23 @@ Http, Https, Socks4, Socks5.
 #### Retry
 Retries the check if has been received bad response (on each protocol separately).
 
+## Blacklist
+Filtering ip addresses through blacklists. You can enable/disable any blacklist separately.
+
+### Add blacklist
+Blacklist must be contain unique title and URL or Local path to ip addresses.
+
+> Ip addresses can be as single (127.0.0.1) or with mask (127.0.0.0/24)
+
+> Lists loads every time before checking (Without progress overlay)
+
+#### Filtering
+> Enable filtering through blacklists.
 
 ## Judges
 Support Multiple proxy judges. With response validating.
 
-#### Only for SSL
+#### SSL
 > Uses only for HTTPS requests.
 
 If disabled - uses as 'usual' for HTTP/SOCKS4/SOCKS5.
@@ -48,7 +55,6 @@ If disabled - allow all responses.
 > Swaps next judge url after each request, for acceleration and keep min server busy.
 
 If disabled - uses judge with min response timeout.
-
 
 ## Data capturing
 Capture full data
@@ -64,24 +70,27 @@ Server: Apache, Nginx
 OS: Ubuntu, CentOS
 ```
 
-## Simple filtering and results export
-Filter proxy list by protocols, anons, countries, keep-alive.
+## Sorting and filtering by all params
+Easy sorting and filtering by ip, port, protocol, anon, country, keep-alive, blacklist, extra, timeout.
+
+### Country selector
+#### Double click for select/deselect all.
 
 Search by:
 ```
-Ip, port, extra data (is enabled), country, city.
+Ip, port, country, city.
 Can be contains multi words for capture, separated by space.
-
-Example:
-put "Mikrotik" and will be captured only Mikrotik proxies. If we put "Mikrotik Squid 8080" will be captured Mikrotik proxies, Squid proxies and 8080 port proxies.
 ```
 
 Exports currently filtered proxy list.
 
-#### Updates
-#### Auto checking at updates and notification is latest version available.
+## Updates
+Auto checking at updates and notification is latest version available.
 
 ## Openproxy.space resource:
 * [Open Proxy Space](https://openproxy.space) - The largest open proxy list database.
 * [Daily Proxy Lists](https://openproxy.space/lists/) - Daily updated proxy lists archive. Dump from database. Sorted by protocols.
-* [API documentation](https://openproxy.space/api) - Openproxy api - build own app based on our open proxy space
+* [API](https://openproxy.space/api) - Openproxy api - build own app based on our open proxy space
+
+## IP Location database
+This product includes GeoLite2 data created by MaxMind, available [here](https://dev.maxmind.com/geoip/geoip2/geolite2/).

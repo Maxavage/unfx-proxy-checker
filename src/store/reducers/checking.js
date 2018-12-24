@@ -1,7 +1,8 @@
-import { UP_COUNTER_STATUS, TOGGLE_CHECKING_OPEN } from '../../constants/ActionTypes';
+import { CHECKING_UP_COUNTER_STATUS, CHECKING_OPEN, CHECKING_OTHER_CHANGES } from '../../constants/ActionTypes';
 
 const initialState = {
-    isOpened: false,
+    opened: false,
+    preparing: false,
     counter: {
         all: 0,
         done: 0,
@@ -18,15 +19,22 @@ const initialState = {
 
 const checking = (state = initialState, action) => {
     switch (action.type) {
-        case UP_COUNTER_STATUS:
+        case CHECKING_UP_COUNTER_STATUS:
             return {
                 ...state,
                 counter: action.counter
             };
-        case TOGGLE_CHECKING_OPEN:
+        case CHECKING_OPEN:
             return {
                 ...state,
-                isOpened: !state.isOpened
+                opened: true,
+                preparing: false,
+                counter: action.counter
+            };
+        case CHECKING_OTHER_CHANGES:
+            return {
+                ...state,
+                ...action.state
             };
         default:
             return state;

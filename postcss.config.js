@@ -6,6 +6,7 @@ module.exports = {
                 'nesting-rules': true
             }
         },
-        'postcss-color-mod-function': {}
+        'postcss-color-mod-function': {},
+        'postcss-inline-svg': {},
     }
 };

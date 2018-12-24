@@ -10,6 +10,7 @@ import { start } from '../actions/CheckingActions';
 import { connect } from 'react-redux';
 
 import '../../public/styles/Main.postcss';
+import '../../public/styles/Elements.postcss';
 
 const Main = ({ start }) => (
     <div className="container">
@@ -22,8 +23,8 @@ const Main = ({ start }) => (
                 <Footer />
             </div>
         </div>
-        <Checking />
         <Result />
+        <Checking />
         <Overlay />
     </div>
 );

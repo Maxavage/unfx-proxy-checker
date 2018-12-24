@@ -100,8 +100,30 @@ export const DEFAULT_IP_SETTINGS = {
     lookupUrl: 'https://api.ipify.org'
 };
 
+export const DEFAULT_BLACKLIST_SETTINGS = {
+    filter: false,
+    items: [
+        {
+            title: 'Spamhaus DROP',
+            active: true,
+            path: 'https://www.spamhaus.org/drop/drop.txt'
+        },
+        {
+            title: 'Spamhaus EDROP',
+            active: true,
+            path: 'https://www.spamhaus.org/drop/edrop.txt'
+        },
+        {
+            title: 'MYIP.MS General',
+            active: true,
+            path: 'https://myip.ms/files/blacklist/general/latest_blacklist.txt'
+        }
+    ]
+};
+
 export const MERGED_DEFAULT_SETTINGS = {
     core: DEFAULT_CORE_SETTINGS,
     judges: DEFAULT_JUDGES_SETTINGS,
-    ip: DEFAULT_IP_SETTINGS
+    ip: DEFAULT_IP_SETTINGS,
+    blacklist: DEFAULT_BLACKLIST_SETTINGS
 };

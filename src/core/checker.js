@@ -1,13 +1,12 @@
 import rp from 'request-promise';
 import store from '../store';
 import ProxyAgent from 'proxy-agent';
-import { uniq } from '../misc/uniq';
 import { lookup } from './country';
-import { toggleOpen as toggleChecking, upCounterStatus } from '../actions/CheckingActions';
-import { toggleOpen as toggleResult, addResult } from '../actions/ResultActions';
+import { openChecking, upCounterStatus } from '../actions/CheckingActions';
+import { showResult } from '../actions/ResultActions';
 
 export default class Checker {
-    constructor(proxies, options, ip, judges, checkProtocols) {
+    constructor(proxies, options, ip, judges, checkProtocols, blacklist) {
         this.checkProtocols = checkProtocols;
         this.doneLevel = checkProtocols.length;
         this.tempStates = {
@@ -15,27 +14,20 @@ export default class Checker {
             // this.initTempState()
         };
 
+        this.judges = judges;
+        this.blacklist = blacklist;
+
         this.ip = ip;
         this.stopped = false;
-        this.timeout = options.timeout;
-        this.captureFullData = options.captureFullData;
-        this.captureExtraData = options.captureExtraData;
-        this.judges = judges;
-
-        this.pool = {
-            running: 0,
-            limit: options.threads,
-            queue: proxies
-        };
-
+        this.queue = proxies;
+        this.options = options;
         this.counter = this.initCounter();
+
         this.initialRequestConfig = {
             time: true,
-            timeout: this.timeout,
+            timeout: this.options.timeout,
             resolveWithFullResponse: true
         };
-
-        this.retry = options.retry;
 
         this.checkAt = {
             http: async (proxy, retry) => {
@@ -81,7 +73,7 @@ export default class Checker {
 
     initCounter() {
         let counter = {
-            all: this.pool.queue.length,
+            all: this.queue.length,
             done: 0,
             protocols: {}
         };
@@ -93,46 +85,43 @@ export default class Checker {
     initTempState(proxy) {
         this.tempStates[proxy] = {
             timeouts: [],
-            anons: [],
+            anon: 'unknown',
             doneLevel: 0,
             protocols: [],
             extra: false,
-            data: null
+            keepAlive: false,
+            data: []
         };
     }
 
-    isIssetExtraMarks(body) {
-        let marks = null;
-
-        if (body.match(/keep-alive/i)) {
-            marks = { ...marks, keepAlive: true };
-        }
+    isIssetExtraData(body) {
+        let data = [];
 
         if (body.match(/squid/i)) {
-            marks = { ...marks, server: 'squid' };
+            data.push({ title: 'Squid', description: 'Server software' });
         }
 
         if (body.match(/ubuntu/i)) {
-            marks = { ...marks, os: 'ubuntu' };
+            data.push({ title: 'Ubuntu', description: 'Server OS' });
         }
 
         if (body.match(/centos/i)) {
-            marks = { ...marks, os: 'centos' };
+            data.push({ title: 'Centos', description: 'Server OS' });
         }
 
         if (body.match(/mikrotik/i)) {
-            marks = { ...marks, server: 'mikrotik' };
+            data.push({ title: 'Mikrotik', description: 'Server software' });
         }
 
         if (body.match(/apache/i)) {
-            marks = { ...marks, server: 'apache' };
+            data.push({ title: 'Apache', description: 'Server software' });
         }
 
         if (body.match(/nginx/i)) {
-            marks = { ...marks, server: 'nginx' };
+            data.push({ title: 'Nginx', description: 'Server software' });
         }
 
-        return marks;
+        return data.length > 0 ? data : false;
     }
 
     getAnon(body) {
@@ -147,9 +136,23 @@ export default class Checker {
         return 'elite';
     }
 
-    next() {
-        this.pool.running--;
-        this.run();
+    setAnon(proxy, anon) {
+        const anonWeights = {
+            transparent: 4,
+            anonymous: 3,
+            elite: 2,
+            unknown: 1
+        };
+
+        if (anonWeights[anon] > anonWeights[this.tempStates[proxy].anon]) {
+            this.tempStates[proxy].anon = anon;
+        }
+    }
+
+    setKeepAlive(proxy, body) {
+        if (!this.tempStates[proxy].keepAlive) {
+            this.tempStates[proxy].keepAlive = body.match(/squid/i);
+        }
     }
 
     onResponse(response, proxy, protocol) {
@@ -160,8 +163,8 @@ export default class Checker {
         if (this.judges.validate(response.body, response.request.href)) {
             const anon = this.getAnon(response.body);
 
-            if (this.captureExtraData) {
-                const extra = this.isIssetExtraMarks(response.body);
+            if (this.options.captureExtraData) {
+                const extra = this.isIssetExtraData(response.body);
 
                 if (extra) {
                     this.tempStates[proxy].extra = extra;
@@ -170,21 +173,20 @@ export default class Checker {
 
             this.tempStates[proxy].timeouts.push(response.elapsedTime);
             this.tempStates[proxy].protocols.push(protocol);
-            this.tempStates[proxy].anons.push(anon);
+            this.setAnon(proxy, anon);
+            this.setKeepAlive(proxy, response.body);
 
-            if (this.captureFullData) {
-                this.tempStates[proxy].data = {
-                    ...this.tempStates[proxy].data,
-                    [protocol]: {
-                        timings: response.timings,
-                        anon: anon,
-                        response: {
-                            statusMessage: response.statusMessage,
-                            body: response.body,
-                            headers: response.headers
-                        }
+            if (this.options.captureFullData) {
+                this.tempStates[proxy].data.push({
+                    protocol,
+                    timings: response.timings,
+                    anon,
+                    judge: response.request.href,
+                    response: {
+                        body: response.body,
+                        headers: response.headers
                     }
-                };
+                });
             }
 
             this.counter.protocols[protocol]++;
@@ -199,7 +201,7 @@ export default class Checker {
             return;
         }
 
-        if (!retry && this.retry) {
+        if (!retry && this.options.retry) {
             return this.checkAt[protocol](proxy, true);
         }
 
@@ -209,7 +211,8 @@ export default class Checker {
 
     getAgentConfig(scheme, proxy) {
         let agent = new ProxyAgent(scheme + proxy);
-        agent.timeout = this.timeout;
+        agent.timeout = this.options.timeout;
+
         return agent;
     }
 
@@ -240,28 +243,33 @@ export default class Checker {
 
     getResult() {
         const result = [];
-        const calcTimeout = timeouts => (timeouts.length > 1 ? timeouts.reduce((a, b) => a + b) / timeouts.length : timeouts[0]);
-        const getAnon = anons => (anons.length > 1 ? uniq(anons) : anons);
+        const calcTimeout = timeouts => (timeouts.length > 1 ? Math.floor(timeouts.reduce((a, b) => a + b) / timeouts.length) : timeouts[0]);
 
         for (let proxy in this.tempStates) {
             if (this.tempStates[proxy].protocols.length > 0) {
-                const split = proxy.split(':');
+                const [ip, port] = proxy.split(':');
 
                 result.push({
-                    ip: split[0],
-                    port: split[1],
+                    ip,
+                    port: Number(port),
                     timeout: calcTimeout(this.tempStates[proxy].timeouts),
-                    anons: getAnon(this.tempStates[proxy].anons),
+                    anon: this.tempStates[proxy].anon,
                     protocols: this.tempStates[proxy].protocols,
-                    country: lookup(split[0]),
+                    country: lookup(ip),
                     extra: this.tempStates[proxy].extra,
-                    data: this.tempStates[proxy].data
+                    data: this.tempStates[proxy].data,
+                    keepAlive: this.tempStates[proxy].keepAlive,
+                    blacklist: this.blacklist ? this.blacklist.check(ip) : false
                 });
             }
         }
 
         delete this.tempStates;
-        return result;
+
+        return {
+            items: result,
+            inBlacklists: this.blacklist ? this.blacklist.getInListsCounter() : false
+        };
     }
 
     isDone(proxy) {
@@ -271,27 +279,24 @@ export default class Checker {
             if (this.counter.done == this.counter.all) {
                 this.dispatchResult();
             } else {
-                this.next();
+                this.run();
             }
         }
     }
 
     run() {
-        if (!this.pool.queue.length) {
+        if (!this.queue.length) {
             return;
         }
 
-        this.pool.running++;
-        const proxy = this.pool.queue.pop();
+        const proxy = this.queue.pop();
         this.initTempState(proxy);
         this.check(proxy);
     }
 
     dispatchResult() {
-        store.dispatch(addResult(this.getResult(), { isEnabled: this.captureExtraData, showSignatures: this.captureExtraData }));
-        store.dispatch(toggleChecking());
-        store.dispatch(toggleResult());
         clearInterval(this.upCounterStatus);
+        store.dispatch(showResult(this.getResult()));
     }
 
     stop() {
@@ -300,12 +305,11 @@ export default class Checker {
     }
 
     start() {
-        store.dispatch(upCounterStatus(this.counter));
-        store.dispatch(toggleChecking());
-        const startPoolThreadsCount = this.pool.queue.length > this.pool.limit ? this.pool.limit : this.pool.queue.length;
+        store.dispatch(openChecking(this.counter));
+        const startThreadsCount = this.queue.length > this.options.threads ? this.options.threads : this.queue.length;
 
         setTimeout(() => {
-            for (let index = 0; index < startPoolThreadsCount; index++) {
+            for (let index = 0; index < startThreadsCount; index++) {
                 this.run();
             }
         }, 300);

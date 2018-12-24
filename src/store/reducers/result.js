@@ -1,24 +1,46 @@
 import {
-    ADD_RESULT,
+    SHOW_RESULT,
     TOGGLE_ANON,
     TOGGLE_PROTOCOL,
     TOGGLE_COUNTRY,
-    TOGGLE_EXTRA,
+    TOGGLE_MISC,
     SET_SEARCH,
     LOAD_MORE,
     RESULT_CLOSE,
-    TOGGLE_OPEN
+    TOGGLE_BLACKLIST,
+    SET_COUNTRIES_SHOW,
+    SET_MAX_TIMEOUT,
+    CHANGE_PORTS_INPUT,
+    SET_PORTS_ALLOW,
+    RESULT_SORT
 } from '../../constants/ActionTypes';
 
 const initialState = {
     isOpened: false,
     items: [],
-    extra: {
-        isEnabled: false,
-        keepAlive: false,
-        showSignatures: true
+    misc: {
+        onlyKeepAlive: false
     },
-    countries: {},
+    timeout: {
+        ranges: {
+            from: 0,
+            to: 0
+        },
+        max: 0
+    },
+    ports: {
+        input: '',
+        allow: true
+    },
+    inBlacklists: [],
+    countries: {
+        show: false,
+        items: []
+    },
+    sorting: {
+        reverse: false,
+        by: 'timeout'
+    },
     anons: {
         transparent: true,
         anonymous: true,
@@ -36,14 +58,43 @@ const initialState = {
 
 const result = (state = initialState, action) => {
     switch (action.type) {
-        case ADD_RESULT:
+        case SHOW_RESULT:
             return {
                 ...state,
+                isOpened: true,
                 items: action.items,
-                countries: action.countries,
-                extra: {
-                    ...state.extra,
-                    ...action.extra
+                countries: {
+                    show: state.countries.show,
+                    items: action.countries
+                },
+                inBlacklists: action.inBlacklists,
+                timeout: action.timeout ? action.timeout : initialState.timeout
+            };
+        case CHANGE_PORTS_INPUT:
+            return {
+                ...state,
+                countOfResults: 25,
+                ports: {
+                    ...state.ports,
+                    input: action.input
+                }
+            };
+        case RESULT_SORT:
+            return {
+                ...state,
+                countOfResults: 25,
+                sorting: {
+                    reverse: !state.sorting.reverse,
+                    by: action.by
+                }
+            };
+        case SET_PORTS_ALLOW:
+            return {
+                ...state,
+                countOfResults: 25,
+                ports: {
+                    ...state.ports,
+                    allow: action.allow
                 }
             };
         case TOGGLE_ANON:
@@ -65,18 +116,63 @@ const result = (state = initialState, action) => {
                 }
             };
         case TOGGLE_COUNTRY:
+            if (action.all) {
+                return {
+                    ...state,
+                    countOfResults: 25,
+                    countries: {
+                        show: state.countries.show,
+                        items: state.countries.items.map(item => {
+                            return {
+                                ...item,
+                                active: action.state
+                            };
+                        })
+                    }
+                };
+            }
+
             return {
                 ...state,
                 countOfResults: 25,
-                countries: action.countries
+                countries: {
+                    show: state.countries.show,
+                    items: state.countries.items.map(item => {
+                        if (item.name == action.name) {
+                            return {
+                                ...item,
+                                active: action.state
+                            };
+                        }
+
+                        return item;
+                    })
+                }
             };
-        case TOGGLE_EXTRA:
+        case SET_COUNTRIES_SHOW:
+            return {
+                ...state,
+                countries: {
+                    ...state.countries,
+                    show: typeof action.show === 'boolean' ? action.show : !state.countries.show
+                }
+            };
+        case SET_MAX_TIMEOUT:
             return {
                 ...state,
                 countOfResults: 25,
-                extra: {
-                    ...state.extra,
-                    [action.extra]: !state.extra[action.extra]
+                timeout: {
+                    ...state.timeout,
+                    max: action.timeout
+                }
+            };
+        case TOGGLE_MISC:
+            return {
+                ...state,
+                countOfResults: 25,
+                misc: {
+                    ...state.misc,
+                    [action.misc]: !state.misc[action.misc]
                 }
             };
         case SET_SEARCH:
@@ -92,10 +188,20 @@ const result = (state = initialState, action) => {
             };
         case RESULT_CLOSE:
             return initialState;
-        case TOGGLE_OPEN:
+        case TOGGLE_BLACKLIST:
             return {
                 ...state,
-                isOpened: !state.isOpened
+                countOfResults: 25,
+                inBlacklists: state.inBlacklists.map(item => {
+                    if (item.title == action.title) {
+                        return {
+                            ...item,
+                            active: !item.active
+                        };
+                    }
+
+                    return item;
+                })
             };
         default:
             return state;

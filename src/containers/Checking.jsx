@@ -6,9 +6,12 @@ import { stop } from '../actions/CheckingActions';
 import '../../public/styles/Checking.postcss';
 
 const Checking = props => (
-    <div className={`checking-page ${props.state.isOpened ? 'opened' : ''}`}>
+    <div className={`checking-page ${props.state.opened ? 'opened' : ''}`}>
         <Counter {...props.state.counter} />
         <button onClick={props.stop}>Stop</button>
+        <div className={`preparing-results ${props.state.preparing ? 'active' : 'unactive'}`}>
+            Preparing results
+        </div>
     </div>
 );
 

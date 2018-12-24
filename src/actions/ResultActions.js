@@ -1,17 +1,25 @@
 import { getFilteredProxies } from '../store/selectors/getFilteredProxies';
 import { writeFile } from 'fs';
+import { sort } from 'js-flock';
 import { remote } from 'electron';
 import {
-    ADD_RESULT,
+    SHOW_RESULT,
     TOGGLE_ANON,
     TOGGLE_PROTOCOL,
     TOGGLE_COUNTRY,
-    TOGGLE_EXTRA,
+    TOGGLE_MISC,
     SET_SEARCH,
     LOAD_MORE,
     RESULT_CLOSE,
-    TOGGLE_OPEN
+    TOGGLE_BLACKLIST,
+    SET_COUNTRIES_SHOW,
+    SET_MAX_TIMEOUT,
+    CHANGE_PORTS_INPUT,
+    SET_PORTS_ALLOW,
+    RESULT_SORT
 } from '../constants/ActionTypes';
+import { otherChanges } from './CheckingActions';
+import { wait } from '../misc/wait';
 
 const { dialog } = remote;
 
@@ -26,13 +34,15 @@ export const save = () => (dispatch, getState) => {
     });
 
     if (savePath) {
-        writeFile(savePath, getFilteredProxies(getState()).map(item => `${item.ip}:${item.port}`).join('\r\n'), () => null);
+        writeFile(
+            savePath,
+            getFilteredProxies(getState())
+                .map(item => `${item.ip}:${item.port}`)
+                .join('\r\n'),
+            () => null
+        );
     }
 };
-
-export const toggleOpen = () => ({
-    type: TOGGLE_OPEN
-});
 
 export const close = () => ({
     type: RESULT_CLOSE
@@ -40,26 +50,59 @@ export const close = () => ({
 
 const createCountries = items => {
     let countries = {};
+    const res = [];
 
     items.forEach(item => {
-        if (countries[item.country.name] == undefined) {
-            countries[item.country.name] = {
-                state: true,
-                count: 1
-            };
-        } else {
-            countries[item.country.name].count++;
-        }
+        countries[item.country.name] = (countries[item.country.name] || 0) + 1;
     });
 
-    return countries;
+    Object.keys(countries).forEach(item => {
+        res.push({
+            active: true,
+            name: item,
+            count: countries[item]
+        });
+    });
+
+    return sort(res).desc(item => item.count);
 };
 
-export const addResult = (items, extra) => ({
-    type: ADD_RESULT,
-    items,
-    countries: createCountries(items),
-    extra
+const createTimeoutRanges = items => {
+    const timeouts = items.map(item => item.timeout);
+
+    if (!timeouts.length) {
+        return false;
+    }
+
+    const ranges = {
+        from: Math.min(...timeouts),
+        to: Math.max(...timeouts)
+    };
+
+    return {
+        ranges,
+        max: ranges.to
+    };
+};
+
+export const showResult = result => async dispatch => {
+    dispatch({
+        type: SHOW_RESULT,
+        items: result.items,
+        countries: createCountries(result.items),
+        inBlacklists: result.inBlacklists,
+        timeout: createTimeoutRanges(result.items)
+    });
+
+    await wait(300);
+    dispatch(otherChanges({ opened: false }));
+    await wait(300);
+    dispatch(otherChanges({ preparing: false }));
+};
+
+export const toggleBlacklist = title => ({
+    type: TOGGLE_BLACKLIST,
+    title
 });
 
 export const toggleAnon = e => ({
@@ -67,14 +110,29 @@ export const toggleAnon = e => ({
     anon: e.target.name
 });
 
+export const setCountriesShow = show => ({
+    type: SET_COUNTRIES_SHOW,
+    show
+});
+
+export const hideCountries = () => ({
+    type: SET_COUNTRIES_SHOW,
+    show: false
+});
+
 export const toggleProtocol = e => ({
     type: TOGGLE_PROTOCOL,
     protocol: e.target.name
 });
 
-export const toggleExtra = e => ({
-    type: TOGGLE_EXTRA,
-    extra: e.target.name
+export const toggleMisc = e => ({
+    type: TOGGLE_MISC,
+    misc: e.target.name
+});
+
+export const setMaxTimeout = e => ({
+    type: SET_MAX_TIMEOUT,
+    timeout: e.target.value
 });
 
 export const onSearchInput = e => ({
@@ -82,24 +140,31 @@ export const onSearchInput = e => ({
     value: e.target.value
 });
 
-export const toggleCountry = (country, all) => (dispatch, getState) => {
-    const { countries } = getState().result;
-    const state = countries[country].state;
-
-    if (all) {
-        for (let country in countries) {
-            countries[country].state = !state;
-        }
-    } else {
-        countries[country].state = !state;
-    }
-
-    dispatch({
-        type: TOGGLE_COUNTRY,
-        countries 
-    });
-};
+export const toggleCountry = (name, all, state) => ({
+    type: TOGGLE_COUNTRY,
+    name,
+    all,
+    state
+});
 
 export const loadMore = () => ({
     type: LOAD_MORE
+});
+
+export const changePortsInput = e => ({
+    type: CHANGE_PORTS_INPUT,
+    input: e.target.value
+});
+
+const setPortsAllow = allow => ({
+    type: SET_PORTS_ALLOW,
+    allow
+});
+
+export const allowPorts = () => setPortsAllow(true);
+export const disallowPorts = () => setPortsAllow(false);
+
+export const sortResults = by => ({
+    type: RESULT_SORT,
+    by
 });

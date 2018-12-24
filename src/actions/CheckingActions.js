@@ -2,10 +2,12 @@ import Core from '../core';
 import Judges from '../core/judges';
 import check from 'check-types';
 import { uniq } from '../misc/uniq';
-import { findProxies, isURL, isIP } from '../misc/regexes';
+import { findProxies, isURL, isIP, isPath } from '../misc/regexes';
 import { saveSettings } from '../core/settings';
 import { IpLookup } from './OverlayIpActions';
-import { UP_COUNTER_STATUS, TOGGLE_CHECKING_OPEN } from '../constants/ActionTypes';
+import { CHECKING_UP_COUNTER_STATUS, CHECKING_OPEN, CHECKING_OTHER_CHANGES } from '../constants/ActionTypes';
+import Blacklist from '../core/blacklist';
+import { wait } from '../misc/wait';
 
 const validateCore = options => {
     options.threads = parseInt(options.threads);
@@ -34,6 +36,14 @@ const validateJudges = (judges, targetProtocols) => {
     throw new Error('Judge URL is not correct');
 };
 
+const validateBlacklist = items => {
+    if (items.every(item => isURL(item.path) || isPath(item.path))) {
+        return true;
+    }
+
+    throw new Error('Blacklist path must be an local path or URL');
+};
+
 const transformProtocols = protocols => {
     const enabledProtocols = Object.keys(protocols).filter(protocol => protocols[protocol]);
 
@@ -54,7 +64,7 @@ const parseInputProxies = list => {
 
 export const start = () => async (dispatch, getState) => {
     try {
-        const { core, judges, ip, input, checking, overlay } = getState();
+        const { core, judges, blacklist, ip, input, checking, overlay } = getState();
 
         if (overlay.judges.locked || overlay.ip.locked || checking.isOpened) {
             return;
@@ -66,8 +76,13 @@ export const start = () => async (dispatch, getState) => {
         validateJudges(judges.items, protocols);
         validateCore(core);
 
+        if (blacklist.filter) {
+            validateBlacklist(blacklist.items);
+        }
+
         const initJudges = await new Judges(judges, protocols);
-        const chainCheck = ip => Core.start(proxies, core, initJudges, protocols, ip);
+        const initBlacklist = blacklist.filter ? await new Blacklist(blacklist.items) : false;
+        const chainCheck = ip => Core.start(proxies, core, initJudges, protocols, ip, initBlacklist);
 
         if (isIP(ip.current)) {
             chainCheck(ip.current);
@@ -80,20 +95,43 @@ export const start = () => async (dispatch, getState) => {
             judges,
             ip: {
                 lookupUrl: ip.lookupUrl
-            }
+            },
+            blacklist
         });
     } catch (error) {
         alert(error);
     }
 };
 
-export const stop = () => () => Core.stop();
+export const stop = () => async (dispatch, getState) => {
+    const { checking } = getState();
 
-export const toggleOpen = () => ({
-    type: TOGGLE_CHECKING_OPEN
+    if (checking.preparing) {
+        return;
+    }
+
+    dispatch(
+        otherChanges({
+            preparing: true
+        })
+    );
+
+    await wait(300);
+
+    Core.stop();
+};
+
+export const otherChanges = state => ({
+    type: CHECKING_OTHER_CHANGES,
+    state
+});
+
+export const openChecking = counter => ({
+    type: CHECKING_OPEN,
+    counter
 });
 
 export const upCounterStatus = counter => ({
-    type: UP_COUNTER_STATUS,
+    type: CHECKING_UP_COUNTER_STATUS,
     counter
 });

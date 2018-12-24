@@ -11,12 +11,12 @@ const getSettings = () => {
             return {
                 ...MERGED_DEFAULT_SETTINGS,
                 ...JSON.parse(readFileSync(SETTINGS_FILE_PATH, 'utf8'))
-            }
+            };
         } catch (error) {
             return MERGED_DEFAULT_SETTINGS;
         }
     }
-    
+
     return MERGED_DEFAULT_SETTINGS;
 };
 

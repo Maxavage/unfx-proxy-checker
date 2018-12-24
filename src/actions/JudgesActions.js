@@ -19,4 +19,4 @@ export const remove = url => ({
 export const toggleOption = e => ({
     type: TOGGLE_JUDGES_OPTION,
     target: e.target.name
-})
+});

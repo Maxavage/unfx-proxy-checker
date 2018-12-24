@@ -1,7 +1,7 @@
 import React from 'react';
 import ResultItemData from './ResultItemData';
 
-class ResultListItem extends React.PureComponent {
+export default class ResultListItem extends React.PureComponent {
     state = {
         isDataOpened: false
     };
@@ -14,88 +14,63 @@ class ResultListItem extends React.PureComponent {
         }
     };
 
-    getClass = protocols => `list-item ${protocols[0].match(/http/) ? 'http' : 'socks'}`;
-}
+    getClass = protocols => (protocols[0].match(/http/) ? 'http' : 'socks');
 
-export class ResultListItemWithSignatures extends ResultListItem {
     render = () => {
-        const { ip, port, count, protocols, anons, country, timeout, extra, data } = this.props;
+        const { ip, port, protocols, anon, country, timeout, keepAlive, extra, data, blacklist } = this.props;
 
         return (
-            <div className={this.getClass(protocols)}>
-                <div className={`main-block ${data != null ? 'with-data' : 'no-data'}`} onClick={this.toggleOpenData}>
+            <div className={`list-item ${this.getClass(protocols)}`}>
+                <div className={`main-block ${data.length > 0 ? 'with-data' : 'no-data'}`} onClick={this.toggleOpenData}>
                     <div className="count">
-                        <span>{count}</span>
-                    </div>
-                    <div className="ip-port">
-                        {ip}:{port}
-                    </div>
-                    {extra ? (
-                        <div className="extra">
-                            {extra.keepAlive ? <span title="Connection: Keep-Alive">K-A</span> : null}
-                            {extra.os ? <span title="OS">{extra.os}</span> : null}
-                            {extra.server ? <span title="Server">{extra.server}</span> : null}
-                        </div>
-                    ) : (
-                        <div className="extra" />
-                    )}
-                    <div className="protocols">
-                        {protocols.map((protocol, index) => (
-                            <span key={index}>{protocol}</span>
-                        ))}
-                    </div>
-                    <div className="anons">
-                        {anons.map((anon, index) => (
-                            <span key={index}>{anon}</span>
-                        ))}
-                    </div>
-                    <div className="country">
-                        <div className={`ico ${country.flag} png`} />
-                        <div className="name">{country.name}</div>
-                        <div className="city" title={country.city}>
-                            {country.city}
-                        </div>
-                    </div>
-                    <div className="timeout">{timeout} ms</div>
-                </div>
-                {this.state.isDataOpened ? <ResultItemData {...data} /> : null}
-            </div>
-        );
-    };
-}
-
-export class ResultListItemWithoutSignatures extends ResultListItem {
-    render = () => {
-        const { ip, port, count, protocols, anons, country, timeout, data } = this.props;
-
-        return (
-            <div className={this.getClass(protocols)}>
-                <div className={`main-block ${data != null ? 'with-data' : 'no-data'}`} onClick={this.toggleOpenData}>
-                    <div className="count">
-                        <span>{count}</span>
+                        <span />
                     </div>
                     <div className="ip">{ip}</div>
                     <div className="port">{port}</div>
                     <div className="protocols">
-                        {protocols.map((protocol, index) => (
-                            <span key={index}>{protocol}</span>
+                        {protocols.map(protocol => (
+                            <span key={protocol}>{protocol}</span>
                         ))}
                     </div>
-                    <div className="anons">
-                        {anons.map((anon, index) => (
-                            <span key={index}>{anon}</span>
-                        ))}
+                    <div className="anon">
+                        <span>{anon}</span>
                     </div>
                     <div className="country">
-                        <div className={`ico ${country.flag} png`} />
-                        <div className="name">{country.name}</div>
-                        <div className="city" title={country.city}>
-                            {country.city}
+                        <div className="ico-wrap">
+                            <div className={`ico ${country.flag} png`} />
+                        </div>
+                        <div className="merged">
+                            <div className="name">{country.name}</div>
+                            <div className="city" title={country.city}>
+                                {country.city}
+                            </div>
                         </div>
                     </div>
-                    <div className="timeout">{timeout} ms</div>
+                    <div className="blacklists">
+                        {blacklist && (
+                            <div className="counts" title={blacklist.join('\n')}>
+                                {blacklist.length}
+                            </div>
+                        )}
+                    </div>
+                    <div className="k-a">
+                        {keepAlive && (
+                            <span title="Connection: Keep-Alive">
+                                K-A
+                            </span>
+                        )}
+                    </div>
+                    <div className="extra">
+                        {extra &&
+                            extra.map(item => (
+                                <span key={item.title} title={`${item.title}: ${item.description}`}>
+                                    {item.title.slice(0, 1)}
+                                </span>
+                            ))}
+                    </div>
+                    <div className="timeout">{timeout}</div>
                 </div>
-                {this.state.isDataOpened ? <ResultItemData {...data} /> : null}
+                {this.state.isDataOpened && <ResultItemData data={data} />}
             </div>
         );
     };

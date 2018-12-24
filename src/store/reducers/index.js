@@ -7,6 +7,7 @@ import overlay from './overlay';
 import core from './core';
 import judges from './judges';
 import ip from './ip';
+import blacklist from './blacklist';
 
 const mainReducer = combineReducers({
     checking,
@@ -16,7 +17,8 @@ const mainReducer = combineReducers({
     update,
     core,
     judges,
-    ip
+    ip,
+    blacklist
 });
 
 export default mainReducer;

@@ -44,7 +44,7 @@ export default {
                 }
             },
             {
-                test: /\.postcss?$/,
+                test: /\.(postcss|css)?$/,
                 use: ['style-loader', {
                     loader: 'css-loader',
                     options: {

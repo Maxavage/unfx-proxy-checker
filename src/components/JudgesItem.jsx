@@ -1,4 +1,5 @@
 import React from 'react';
+import Checkbox from './ui/Checkbox';
 
 export default class JudgesItem extends React.PureComponent {
     toggleSSL = () => {
@@ -8,19 +9,23 @@ export default class JudgesItem extends React.PureComponent {
 
     toggleValidate = () => {
         const { change, url, validate } = this.props;
+        const enabledState = validate.value.length > 0 ? !validate.enabled : false;
+
         change(url, {
             validate: {
                 ...validate,
-                enabled: !validate.enabled
+                enabled: enabledState
             }
         });
     };
 
     changeValidateString = e => {
-        const { change, url, validate } = this.props;
+        const { change, url } = this.props;
+        const enabledState = e.target.value.length > 0 ? true : false;
+
         change(url, {
             validate: {
-                ...validate,
+                enabled: enabledState,
                 value: e.target.value
             }
         });
@@ -36,32 +41,20 @@ export default class JudgesItem extends React.PureComponent {
 
         return (
             <div className="item">
-                <div className="top">
-                    <div className="url">{url}</div>
-                    <button className="less" onClick={this.remove}>
-                        Remove
-                    </button>
-                </div>
-                <div className="additional">
-                    <input type="checkbox" id={`ssl-${url}`} className="inp-cbx" checked={ssl} onChange={this.toggleSSL} />
-                    <label htmlFor={`ssl-${url}`} className="cbx">
-                        <span>
-                            <svg width="12px" height="10px" viewBox="0 0 12 10">
-                                <polyline points="1.5 6 4.5 9 10.5 1" />
-                            </svg>
-                        </span>
-                        <span>Only for SSL</span>
-                    </label>
-                    <input type="checkbox" id={`validate-${url}`} className="inp-cbx" checked={validate.enabled} onChange={this.toggleValidate} />
-                    <label htmlFor={`validate-${url}`} className="cbx">
-                        <span>
-                            <svg width="12px" height="10px" viewBox="0 0 12 10">
-                                <polyline points="1.5 6 4.5 9 10.5 1" />
-                            </svg>
-                        </span>
-                        <span>Validate</span>
-                    </label>
-                    <input type="text" className="field" value={validate.value} onChange={this.changeValidateString} placeholder="Validate string (supports Regex)" />
+                <div className="sides">
+                    <div className="left">
+                        <Checkbox id={`ssl-${url}`} name={`ssl-${url}`} checked={ssl} onChange={this.toggleSSL} text="SSL" />
+                        <Checkbox id={`validate-${url}`} name={`validate-${url}`} checked={validate.enabled} onChange={this.toggleValidate} text="Validate" />
+                    </div>
+                    <div className="right">
+                        <div className="url-remove">
+                            <span>{url}</span>
+                            <button className="less" onClick={this.remove}>
+                                Remove
+                            </button>
+                        </div>
+                        <input type="text" className="field" value={validate.value} onChange={this.changeValidateString} placeholder="Validate string (supports Regex)" />
+                    </div>
                 </div>
             </div>
         );

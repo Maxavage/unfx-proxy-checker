@@ -31,7 +31,6 @@ class ProxyInput extends React.Component {
                     autoCorrect="off"
                     autoCapitalize="off"
                     spellCheck="false"
-                    cols="30"
                     rows="10"
                     onChange={this.onInputEvent}
                     value={input}

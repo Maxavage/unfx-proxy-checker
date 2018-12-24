@@ -3,12 +3,15 @@ import { connect } from 'react-redux';
 import { change, add, remove, toggleOption } from '../actions/JudgesActions';
 import JudgesItem from '../components/JudgesItem';
 import JudgesAddNew from '../components/JudgesAddNew';
+import Checkbox from '../components/ui/Checkbox';
 
 const Judges = ({ items, swap, change, add, remove, toggleOption }) => (
     <>
         <div className="block middle">
-            <h1 className="title">Currently active:</h1>
-            <div className="content no-flex">
+            <div className="title space-bot">
+                <span className="name">Currently active</span>
+            </div>
+            <div className="content no-flex no-bot">
                 <div className="judges-list">
                     <div className="items">
                         {items.map(item => (
@@ -19,20 +22,22 @@ const Judges = ({ items, swap, change, add, remove, toggleOption }) => (
             </div>
         </div>
         <div className="block middle">
-            <h1 className="title">Extra:</h1>
-            <div className="content no-flex">
-                <input type="checkbox" id="swap" className="inp-cbx" name="swap" checked={swap} onChange={toggleOption} />
-                <label htmlFor="swap" className="cbx">
-                    <span>
-                        <svg width="12px" height="10px" viewBox="0 0 12 10">
-                            <polyline points="1.5 6 4.5 9 10.5 1" />
-                        </svg>
-                    </span>
-                    <span>Swap</span>
-                </label>
+            <div className="sub-block">
+                <div className="title">
+                    <span className="name">Options</span>
+                </div>
+                <div className="content no-flex">
+                    <Checkbox id="swap" name="swap" checked={swap} onChange={toggleOption} text="Swap" />
+                </div>
             </div>
-            <h1 className="title">Add new Judge:</h1>
-            <JudgesAddNew add={add} />
+            <div className="sub-block">
+                <div className="title space-bot">
+                    <span className="name">Add new</span>
+                </div>
+                <div className="content no-flex no-bot">
+                    <JudgesAddNew add={add} />
+                </div>
+            </div>
         </div>
     </>
 );

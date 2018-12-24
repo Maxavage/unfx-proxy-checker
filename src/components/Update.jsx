@@ -22,7 +22,7 @@ class Update extends React.PureComponent {
                     <div />
                     <div />
                 </div>
-                {isAvailable ? (
+                {isAvailable && (
                     <div className="update-container">
                         <div className="update-content">
                             <div className="update-section-split">Available version: {info.version}</div>
@@ -41,15 +41,11 @@ class Update extends React.PureComponent {
                         </div>
                         <button onClick={close}>Ok</button>
                     </div>
-                ) : (
-                    ''
                 )}
-                {onDownloading ? (
+                {onDownloading && (
                     <div className="download-progress">
                         <div className="download-progress-bar" style={progress} />
                     </div>
-                ) : (
-                    ''
                 )}
             </div>
         );

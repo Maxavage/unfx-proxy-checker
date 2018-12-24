@@ -5,8 +5,6 @@ import { AppContainer } from 'react-hot-loader';
 import { Provider } from 'react-redux';
 import store from './store/index';
 
-import '../public/styles/elements.postcss';
-
 const root = document.getElementById('root');
 
 const render = () => {
